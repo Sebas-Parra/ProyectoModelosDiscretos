@@ -1,0 +1,5 @@
+PREGUNTA: ¿Que es la logica de predicados?
+RESPUESTA: Es un tipo de logica para manejar cuantificadores y predicados que se aplican a variables individuales.
+
+PREGUNTA: ¿Cual es el simbolo de la implicacion logica?
+RESPUESTA: El simbolo de la implicacion logica es -> .

@@ -22,10 +22,19 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+#include <cstring>
+#include "Preguntas.h"
+#include <vector>
+#include <string>
 
 //------------------------------------------------------------------------------------
 // Program main entry point
-    typedef enum GameScreen {LOGO = 0, TITLE, GAMEPLAY, ENDING} GameScreen;
+    typedef enum GameScreen {LOGO = 0, TITLE, GAMEPLAY, ENDING, CHATBOT} GameScreen;
+
+    bool IsMouseOverRectangle(int x, int y, int ancho, int alto) {
+        Vector2 raton = GetMousePosition();
+        return (raton.x > x && raton.x < x + ancho && raton.y > y && raton.y < y + alto);
+    }
 //------------------------------------------------------------------------------------
 int main(void)
 {
@@ -34,7 +43,7 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "Proyecto Grupol");
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -43,6 +52,12 @@ int main(void)
     GameScreen currentScreen = LOGO;
 
     int framesCounter = 0; // por necesitmos medir el tiempo de espera
+    
+    Preguntas preguntas("Aprendido.txt");
+    const std::vector<std::string>& listaPreguntas = preguntas.obtenerPreguntas();
+    const std::vector<std::string>& listaRespuestas = preguntas.obtenerRespuestas();
+    int preguntaSeleccionada = -1;
+
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -62,6 +77,7 @@ int main(void)
         case  TITLE:
             //Logica para todo lo que venga en el titulo de la app
             if(IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = GAMEPLAY;
+            if (IsKeyPressed(KEY_C)) currentScreen = CHATBOT;
             break;
         case GAMEPLAY:
             //Aqui va a ir toda la logica del juego en curso
@@ -69,6 +85,39 @@ int main(void)
             break;
         case ENDING:
             if (IsKeyPressed(KEY_ESCAPE)) break;
+            break;
+        case CHATBOT:
+            // Dibujar la lista de preguntas
+            for (int i = 0; i < listaPreguntas.size(); i++) {
+                if (IsMouseOverRectangle(10, 50 + i * 30, 780, 30)) {
+                    DrawRectangle(10, 50 + i * 30, 780, 30, LIGHTGRAY);
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                        preguntaSeleccionada = i;
+                    }
+                }
+                DrawText(listaPreguntas[i].c_str(), 10, 50 + i * 30, 20, BLACK);
+            }
+
+            // Dibujar la respuesta seleccionada
+            if (preguntaSeleccionada != -1) {
+                DrawText("Pregunta:", 10, 350, 20, DARKGRAY);
+                DrawText(listaPreguntas[preguntaSeleccionada].c_str(), 10, 380, 20, BLACK);
+                DrawText("Respuesta:", 10, 410, 20, DARKGRAY);
+                DrawText(listaRespuestas[preguntaSeleccionada].c_str(), 10, 440, 20, BLACK);
+            }
+
+            // Dibujar el botón de regreso
+            if (IsMouseOverRectangle(650, 400, 120, 40)) {
+                DrawRectangle(650, 400, 120, 40, GRAY);
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    currentScreen = TITLE;
+                    preguntaSeleccionada = -1; // Resetear la selección al volver al título
+                }
+            }
+            else {
+                DrawRectangle(650, 400, 120, 40, LIGHTGRAY);
+            }
+            DrawText("Volver", 675, 410, 20, BLACK);
             break;
         }
         //----------------------------------------------------------------------------------
@@ -88,6 +137,7 @@ int main(void)
         case  TITLE:
             //Diseño del titulo
             DrawText("Presiona Enter para continuar a la siguiente parte", 200, 150, 30, BLACK);
+            DrawText("Presiona C para abrir el Chatbot", 200, 200, 30, BLACK);
             break;
         case GAMEPLAY:
             //Diseño del juego en si
@@ -96,6 +146,41 @@ int main(void)
         case ENDING:
             //Diseño del final
             DrawText("Presiona ESC para salir",0,0,30,PINK);
+            break;
+        case CHATBOT:
+            DrawText("Chatbot", 10, 10, 20, DARKGRAY);
+
+            // Dibujar la lista de preguntas
+            for (int i = 0; i < listaPreguntas.size(); i++) {
+                if (IsMouseOverRectangle(10, 50 + i * 30, 780, 30)) {
+                    DrawRectangle(10, 50 + i * 30, 780, 30, LIGHTGRAY);
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                        preguntaSeleccionada = i;
+                    }
+                }
+                DrawText(listaPreguntas[i].c_str(), 10, 50 + i * 30, 20, BLACK);
+            }
+
+            // Dibujar la respuesta seleccionada
+            if (preguntaSeleccionada != -1) {
+                DrawText("Pregunta:", 10, 350, 20, DARKGRAY);
+                DrawText(listaPreguntas[preguntaSeleccionada].c_str(), 10, 380, 20, BLACK);
+                DrawText("Respuesta:", 10, 410, 20, DARKGRAY);
+                DrawText(listaRespuestas[preguntaSeleccionada].c_str(), 10, 440, 20, BLACK);
+            }
+
+            // Dibujar el botón de regreso
+            if (IsMouseOverRectangle(650, 400, 120, 40)) {
+                DrawRectangle(650, 400, 120, 40, GRAY);
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    currentScreen = TITLE;
+                    preguntaSeleccionada = -1; // Resetear la selección al volver al título
+                }
+            }
+            else {
+                DrawRectangle(650, 400, 120, 40, LIGHTGRAY);
+            }
+            DrawText("Volver", 675, 410, 20, BLACK);
             break;
         }
 
