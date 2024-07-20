@@ -40,8 +40,8 @@ int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 800; //Ancho
+    const int screenHeight = 450; //Altura
 
     InitWindow(screenWidth, screenHeight, "Proyecto Grupol");
 
@@ -57,7 +57,29 @@ int main(void)
     const std::vector<std::string>& listaPreguntas = preguntas.obtenerPreguntas();
     const std::vector<std::string>& listaRespuestas = preguntas.obtenerRespuestas();
     int preguntaSeleccionada = -1;
-
+    //Aqui se crea el personaje
+    Texture2D personaje = LoadTexture("knight_run_spritesheet.png");
+    Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
+    float velocidadBol = 4.0f;
+    float scalaP = 2.0f;
+    int frameWidthP = personaje.width / 6;;// Asumiendo que hay 6 frames en la animación
+    int frameHeightP = personaje.height;
+    Rectangle sourceRecP = { 0.0f,0.0f,(float)frameWidthP,(float)frameHeightP };
+    Rectangle destRecP = { personajePos.x,personajePos.y,frameWidthP * scalaP,frameHeightP * scalaP };
+    Vector2 originP = { (frameWidthP * scalaP) / 2.0f, (frameHeightP * scalaP) / 2.0f };
+    float Rotation = 0.0f;
+    int framesCouter = 0;
+    int currentframes = 0;
+    //Aqui se crean los demas objetos
+    Texture2D mesa1 = LoadTexture("mesa1.png");
+    Vector2 mesa1Pos = { (float)screenWidth - 750,(float)screenHeight - 450 };
+    int frameWidthM1 = mesa1.width;
+    int frameHeightM1 = mesa1.height;
+    float scalaM1 = 0.2f;
+    Rectangle sourceRecM1 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
+    Rectangle destRecM1 = { mesa1Pos.x,mesa1Pos.y,frameWidthM1 * scalaM1, frameHeightM1 * scalaM1 };
+    Vector2 originM1 = { 0.0f,0.0f };
+    float rotation = 45.0f;
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -81,6 +103,18 @@ int main(void)
             break;
         case GAMEPLAY:
             //Aqui va a ir toda la logica del juego en curso
+            framesCounter++;
+            if (framesCounter >= (60 / 8)) {
+                framesCounter = 0;
+                currentframes++;
+
+                if (currentframes > 5) currentframes = 0;
+                sourceRecP.x = (float)currentframes * frameWidthP;
+            }
+            if (IsKeyDown(KEY_RIGHT)) personajePos.x += velocidadBol;
+            if (IsKeyDown(KEY_LEFT)) personajePos.x -= velocidadBol;
+            if (IsKeyDown(KEY_UP)) personajePos.y -= velocidadBol;
+            if (IsKeyDown(KEY_DOWN)) personajePos.y += velocidadBol;
             if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = ENDING;
             break;
         case ENDING:
@@ -141,6 +175,10 @@ int main(void)
             break;
         case GAMEPLAY:
             //Diseño del juego en si
+            destRecP.x = personajePos.x;
+            destRecP.y = personajePos.y;
+            DrawTexturePro(personaje, sourceRecP, destRecP, originP, Rotation, WHITE);
+            DrawTexturePro(mesa1,sourceRecM1,destRecM1,originM1,rotation,WHITE);
             DrawText("Aqui va el juego", 0,0,30,BLACK);
             break;
         case ENDING:
