@@ -26,7 +26,7 @@ int main(void)
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
-    // La primera ventana que se verÃ¡ sera la del menÃº
+    // La primera ventana que se verá sera la del menú
     GameScreen currentScreen = LOGO;
 
     int framesCounter = 0; // por necesitmos medir el tiempo de espera
@@ -42,7 +42,7 @@ int main(void)
     Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
     float velocidadBol = 4.0f;
     float scalaP = 2.0f;
-    int frameWidthP = personaje.width / 6;;// Asumiendo que hay 6 frames en la animaciÃ³n
+    int frameWidthP = personaje.width / 6;;// Asumiendo que hay 6 frames en la animación
     int frameHeightP = personaje.height;
     Rectangle sourceRecP = { 0.0f,0.0f,(float)frameWidthP,(float)frameHeightP };
     Rectangle destRecP = { personajePos.x,personajePos.y,frameWidthP * scalaP,frameHeightP * scalaP };
@@ -72,7 +72,7 @@ int main(void)
             // Todo lo que tenga que venir en el logo de la app
             // Solo aqui van a ir los frames por segundo
             // En esta parte solo se debe esperar hasta que pase a la siguiente 
-            // pestaÃ±a
+            // pestaña
             // framesCounter++;
             // if (framesCounter > 300) currentScreen = TITLE;
             if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = GAMEPLAY;
@@ -99,34 +99,32 @@ int main(void)
             break;
         }
         case CHATBOT: {
-            DrawText("Hola, soy Chatbot. Escribe tu pregunta:", 10, 10, 20, DARKGRAY);
-
             // Campo de texto para la pregunta del usuario
-            static char text[256] = { 0 }; // Inicializa el texto vacÃ­o
+            static char text[256] = { 0 }; // Inicializa el texto vacío
             static int textLength = 0;
 
             // Captura la entrada del teclado
             int key = GetCharPressed();
             while (key > 0) {
                 // Solo capturamos caracteres imprimibles, incluyendo caracteres especiales
-                if ((key >= 32) && (key <= 126) || (key >= 192 && key <= 255)) {
+                if ((key >= 32) && (key <= 126) || (key >= 192 && key <= 255) ) {
                     if (textLength < sizeof(text) - 1) {
                         text[textLength++] = (char)key;
-                        text[textLength] = '\0'; // Aseguramos que el texto estÃ© terminado en nulo
+                        text[textLength] = '\0'; // Aseguramos que el texto esté terminado en nulo
                     }
                 }
-                key = GetCharPressed(); // Captura el siguiente carÃ¡cter
+                key = GetCharPressed(); // Captura el siguiente carácter
             }
 
             // Manejo del retroceso
             if (IsKeyPressed(KEY_BACKSPACE)) {
                 if (textLength > 0) {
                     textLength--;
-                    text[textLength] = '\0'; // Aseguramos que el texto estÃ© terminado en nulo
+                    text[textLength] = '\0'; // Aseguramos que el texto esté terminado en nulo
                 }
             }
 
-            // Manejo de envÃ­o del texto
+            // Manejo de envío del texto
             if (IsKeyPressed(KEY_ENTER)) {
                 preguntaUsuario = text;
                 // Busca la pregunta en la lista
@@ -152,28 +150,7 @@ int main(void)
             DrawText("Respuesta:", 10, 100, 20, DARKGRAY);
             DrawText(respuesta.c_str(), 10, 130, 20, BLACK);
 
-            // Dibujar el botÃ³n de regreso
-            {
-                int screenW = GetScreenWidth();
-                int screenH = GetScreenHeight();
-                if (IsMouseOverRectangle(screenW - 130, 10, 120, 40)) {
-                    DrawRectangle(screenW - 130, 10, 120, 40, GRAY);
-                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                        currentScreen = LOGO;
-                        preguntaUsuario = "";
-                        respuesta = "";
-                    }
-                }
-                else {
-                    DrawRectangle(screenW - 130, 10, 120, 40, LIGHTGRAY);
-                }
-                DrawText("Volver", screenW - 105, 20, 20, BLACK);
-
-                // Mostrar el texto para salir
-                int textWidth = MeasureText("Presiona ESC para salir", 30);
-                DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 30, PINK);
-            }
-
+            
             break;
         }
         }
@@ -181,14 +158,14 @@ int main(void)
 
         // Draw
         //----------------------------------------------------------------------------------
-        // Aqui es donde va a ir todo el diseÃ±o del juego
+        // Aqui es donde va a ir todo el diseño del juego
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
 
         switch (currentScreen) {
         case LOGO:
-            // Aqui es el diseÃ±o del logo
+            // Aqui es el diseño del logo
             DrawText("Bienvenido a este mundo!!", 300, 150, 30, BLACK);
             DrawText("Presiona Enter para continuar a la siguiente parte", 200, 200, 30, BLACK);
             DrawText("Presiona C para abrir el Chatbot", 200, 250, 30, BLACK);
@@ -200,38 +177,13 @@ int main(void)
             }
             break;
         case GAMEPLAY:
-            // DiseÃ±o del juego en si
+            // Diseño del juego en si
             destRecP.x = personajePos.x;
             destRecP.y = personajePos.y;
             DrawTexturePro(personaje, sourceRecP, destRecP, originP, Rotation, WHITE);
             DrawTexturePro(mesa1, sourceRecM1, destRecM1, originM1, rotation, WHITE);
             DrawText("Aqui va el juego", 0, 0, 30, BLACK);
-            // Dibujar el botÃ³n de regreso
-            {
-                int screenW = GetScreenWidth();
-                int screenH = GetScreenHeight();
-                if (IsMouseOverRectangle(screenW - 130, 10, 120, 40)) {
-                    DrawRectangle(screenW - 130, 10, 120, 40, GRAY);
-                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                        currentScreen = LOGO;
-                    }
-                }
-                else {
-                    DrawRectangle(screenW - 130, 10, 120, 40, LIGHTGRAY);
-                }
-                DrawText("Volver", screenW - 105, 20, 20, BLACK);
-                {
-                    int textWidth = MeasureText("Presiona ESC para salir", 30);
-                    int screenW = GetScreenWidth();
-                    int screenH = GetScreenHeight();
-                    DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 30, PINK);
-                }
-            }
-            break;
-        case CHATBOT:
-            DrawText("Chatbot", 10, 10, 20, DARKGRAY);
-
-            
+            // Dibujar el botón de regreso
             {
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
@@ -247,12 +199,33 @@ int main(void)
                     DrawRectangle(screenW - 130, 10, 120, 40, LIGHTGRAY);
                 }
                 DrawText("Volver", screenW - 105, 20, 20, BLACK);
-                {
-                    int textWidth = MeasureText("Presiona ESC para salir", 30);
-                    int screenW = GetScreenWidth();
-                    int screenH = GetScreenHeight();
-                    DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 30, PINK);
+                // Mostrar el texto para salir
+                int textWidth = MeasureText("Presiona ESC para salir", 20);
+                DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 20, PINK);
+            }
+            break;
+        case CHATBOT:
+            DrawText("Hola, soy Chatbot. Escribe tu pregunta:", 10, 10, 20, DARKGRAY);
+            
+            // Dibujar el botón de regreso
+            {
+                int screenW = GetScreenWidth();
+                int screenH = GetScreenHeight();
+                if (IsMouseOverRectangle(screenW - 130, 10, 120, 40)) {
+                    DrawRectangle(screenW - 130, 10, 120, 40, GRAY);
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                        currentScreen = LOGO;
+                        preguntaUsuario = "";
+                        respuesta = "";
+                    }
                 }
+                else {
+                    DrawRectangle(screenW - 130, 10, 120, 40, LIGHTGRAY);
+                }
+                DrawText("Volver", screenW - 105, 20, 20, BLACK);
+                // Mostrar el texto para salir
+                int textWidth = MeasureText("Presiona ESC para salir", 20);
+                DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 20, PINK);
             }
             break;
         }
