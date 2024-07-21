@@ -45,6 +45,8 @@ int main(void)
     std::string respuesta = "";
     bool preguntaSeleccionadaFlag = false;
     std::string lineaRand = "";
+    bool respuestaSeleccionadaFLag = false;
+    int respSelec = -1; //No se ha seleccionado ninguna respuesta
 
     // Aqui se crea el personaje
     Texture2D personaje = LoadTexture("knight_run_spritesheet.png");
@@ -111,6 +113,7 @@ int main(void)
     Rectangle botonResp2 = { screenWidth - 690,screenHeight - 290, 20, 20 };
     Rectangle botonResp3 = { screenWidth - 690, screenHeight - 260, 20, 20 };
     Rectangle botonResp4 = { screenWidth - 690,screenHeight - 230,20,20 };
+    Rectangle botonEnviarResp = { screenWidth - 690, screenHeight - 200, 68,20 };
     //---------------------------------------------------------------------------------
 
     // Main game loop
@@ -158,8 +161,16 @@ int main(void)
                 preguntaSeleccionadaFlag = false;
             }
 
-            
 
+            if (IsMouseOverRectangle(botonEnviarResp.x, botonEnviarResp.y, botonEnviarResp.width, botonEnviarResp.height) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                currentScreen = GAMEPLAY;
+                lineaRand = "";
+                respuestaSeleccionadaFLag = false;
+                preguntaSeleccionadaFlag = false;
+                respSelec = -1;
+            }
+            
+            
             break;
         case CHATBOT: {
             // Campo de texto para la pregunta del usuario
@@ -344,10 +355,43 @@ int main(void)
             if (CheckCollisionPointRec(GetMousePosition(), botonInfo)) {
                 DrawRectangleRec(cuadroInfo, GREEN);
             }
-            DrawRectangleRec(botonResp1, BLACK);
-            DrawRectangleRec(botonResp2, BLACK);
-            DrawRectangleRec(botonResp3, BLACK);
-            DrawRectangleRec(botonResp4, BLACK);
+            DrawRectangleRec(botonResp1, respSelec == 1 ? GREEN:BLACK);
+            DrawRectangleRec(botonResp2, respSelec == 2 ? GREEN : BLACK);
+            DrawRectangleRec(botonResp3, respSelec == 3 ? GREEN : BLACK);
+            DrawRectangleRec(botonResp4, respSelec == 4 ? GREEN : BLACK);
+            if (!respuestaSeleccionadaFLag) {
+                
+
+                if (IsMouseOverRectangle(botonResp1.x, botonResp1.y, botonResp1.width, botonResp1.height)
+                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    DrawRectangleRec(botonResp1, GREEN);
+                    respSelec = 1;
+                    respuestaSeleccionadaFLag = true;                    
+                }
+                
+                else if (IsMouseOverRectangle(botonResp2.x, botonResp2.y, botonResp2.width, botonResp2.height)
+                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    DrawRectangleRec(botonResp2, GREEN);
+                    respSelec = 2;
+                    respuestaSeleccionadaFLag = true;
+                }
+                
+                else if (IsMouseOverRectangle(botonResp3.x, botonResp3.y, botonResp3.width, botonResp3.height)
+                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    DrawRectangleRec(botonResp3, GREEN);
+                    respSelec = 3;
+                    respuestaSeleccionadaFLag = true;
+                }
+                
+                else if (IsMouseOverRectangle(botonResp4.x, botonResp4.y, botonResp4.width, botonResp4.height)
+                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    DrawRectangleRec(botonResp4, GREEN);
+                    respSelec = 4;
+                    respuestaSeleccionadaFLag = true;
+                }
+            }
+            DrawRectangleRec(botonEnviarResp,BLUE);
+            DrawText("Enviar", screenWidth-689,screenHeight - 198, 20,BLACK);
             break;
         }
         case CHATBOT:

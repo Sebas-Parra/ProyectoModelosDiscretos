@@ -1,32 +1,32 @@
-PREGUNTA: ¿Qué es la inferencia lógica?
-A) Es un proceso de deducción que utiliza reglas arbitrarias.  
-B) Es un proceso de deducción que utiliza reglas de lógica formal para derivar conclusiones a partir de premisas.  
-C) Es un proceso de inducción que utiliza ejemplos específicos para formular teorías generales.  
+PREGUNTA: ¿Que es la inferencia logica?
+A) Es un proceso de deduccion que utiliza reglas arbitrarias.  
+B) Es un proceso de deduccion que utiliza reglas de logica formal para derivar conclusiones a partir de premisas.  
+C) Es un proceso de induccion que utiliza ejemplos especificos para formular teorías generales.  
 D) Es un proceso de comparación que utiliza analogías para encontrar similitudes.  
 RESPUESTA: B
 
-PREGUNTA: ¿Qué representa el modus ponens en lógica?
+PREGUNTA: ¿Que representa el modus ponens en logica?
 A) Si P entonces Q, Q es falso, por lo tanto P es falso.  
 B) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.  
 C) Si P entonces Q, P es falso, por lo tanto Q es falso.  
 D) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.  
 RESPUESTA: B
 
-PREGUNTA: ¿Qué representa el modus tollens en lógica?
+PREGUNTA: ¿Que representa el modus tollens en logica?
 A) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.  
 B) Si P entonces Q, Q es falso, por lo tanto P es falso.  
 C) Si P entonces Q, P es falso, por lo tanto Q es falso.  
 D) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.  
 RESPUESTA: B
 
-PREGUNTA: ¿Qué es una premisa en lógica?
+PREGUNTA: ¿Que es una premisa en logica?
 A) Es una conclusión derivada de un argumento.  
 B) Es una suposición arbitraria sin base en hechos.  
 C) Es una proposición que sirve como base para un argumento.  
 D) Es una afirmación que no puede ser verdadera ni falsa.  
 RESPUESTA: C
 
-PREGUNTA: ¿Qué es una conclusión en lógica?
+PREGUNTA: ¿Que es una conclusión en logica?
 A) Es una proposición que no se puede verificar ni refutar.
 B) Es una proposición que se asume sin evidencia.
 C) Es una proposición que se deriva lógicamente de las premisas.
