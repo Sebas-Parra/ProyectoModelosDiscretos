@@ -106,6 +106,11 @@ int main(void)
     Rectangle botonRegresoGameplay = { screenWidth - 790, screenHeight - 440,90,40 };
     Rectangle botonInfo = { screenWidth - 790, screenHeight - 50, 85,35 };
     Rectangle cuadroInfo = { screenWidth - 790, screenHeight - 150, 50,50 };
+
+    Rectangle botonResp1 = { screenWidth - 690, screenHeight - 320, 20,20 };
+    Rectangle botonResp2 = { screenWidth - 690,screenHeight - 290, 20, 20 };
+    Rectangle botonResp3 = { screenWidth - 690, screenHeight - 260, 20, 20 };
+    Rectangle botonResp4 = { screenWidth - 690,screenHeight - 230,20,20 };
     //---------------------------------------------------------------------------------
 
     // Main game loop
@@ -135,10 +140,10 @@ int main(void)
                 if (currentframes > 5) currentframes = 0;
                 sourceRecP.x = (float)currentframes * frameWidthP;
             }
-            if (IsKeyDown(KEY_RIGHT)) personajePos.x += velocidadBol;
-            if (IsKeyDown(KEY_LEFT)) personajePos.x -= velocidadBol;
-            if (IsKeyDown(KEY_UP)) personajePos.y -= velocidadBol;
-            if (IsKeyDown(KEY_DOWN)) personajePos.y += velocidadBol;
+            if (IsKeyDown(KEY_RIGHT) && personajePos.x < 799) personajePos.x += velocidadBol;
+            if (IsKeyDown(KEY_LEFT) && personajePos.x > 1) personajePos.x -= velocidadBol;
+            if (IsKeyDown(KEY_UP) && personajePos.y > 1) personajePos.y -= velocidadBol;
+            if (IsKeyDown(KEY_DOWN) && personajePos.y < 449) personajePos.y += velocidadBol;
             //if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = ENDING;
 
             
@@ -331,7 +336,7 @@ int main(void)
             preguntaSeleccionadaFlag = true;          
             }
             const char* lin = lineaRand.c_str();
-            DrawText(lin, screenWidth - 750, screenHeight - 300, 20, BLACK);
+            DrawText(lin, screenWidth - 690, screenHeight - 350, 20, BLACK);
             DrawRectangleRec(botonRegresoGameplay, BLUE);
             DrawText("Volver", screenWidth - 780, screenHeight - 435, 20, BLACK);
             DrawRectangleRec(botonInfo, GREEN);
@@ -339,6 +344,10 @@ int main(void)
             if (CheckCollisionPointRec(GetMousePosition(), botonInfo)) {
                 DrawRectangleRec(cuadroInfo, GREEN);
             }
+            DrawRectangleRec(botonResp1, BLACK);
+            DrawRectangleRec(botonResp2, BLACK);
+            DrawRectangleRec(botonResp3, BLACK);
+            DrawRectangleRec(botonResp4, BLACK);
             break;
         }
         case CHATBOT:
