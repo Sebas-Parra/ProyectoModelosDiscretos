@@ -49,11 +49,11 @@ int main(void)
     int respSelec = -1; //No se ha seleccionado ninguna respuesta
 
     // Aqui se crea el personaje
-    Texture2D personaje = LoadTexture("knight_run_spritesheet.png");
+    Texture2D personaje = LoadTexture("Robot.png");
     Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
     float velocidadBol = 4.0f;
     float scalaP = 2.0f;
-    int frameWidthP = personaje.width / 6;;// Asumiendo que hay 6 frames en la animación
+    int frameWidthP = personaje.width / 8;// Asumiendo que hay 6 frames en la animación
     int frameHeightP = personaje.height;
     Rectangle sourceRecP = { 0.0f,0.0f,(float)frameWidthP,(float)frameHeightP };
     Rectangle destRecP = { personajePos.x,personajePos.y,frameWidthP * scalaP,frameHeightP * scalaP };
@@ -369,21 +369,21 @@ int main(void)
                     respuestaSeleccionadaFLag = true;                    
                 }
                 
-                else if (IsMouseOverRectangle(botonResp2.x, botonResp2.y, botonResp2.width, botonResp2.height)
+                if (IsMouseOverRectangle(botonResp2.x, botonResp2.y, botonResp2.width, botonResp2.height)
                     && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     DrawRectangleRec(botonResp2, GREEN);
                     respSelec = 2;
                     respuestaSeleccionadaFLag = true;
                 }
                 
-                else if (IsMouseOverRectangle(botonResp3.x, botonResp3.y, botonResp3.width, botonResp3.height)
+                if (IsMouseOverRectangle(botonResp3.x, botonResp3.y, botonResp3.width, botonResp3.height)
                     && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     DrawRectangleRec(botonResp3, GREEN);
                     respSelec = 3;
                     respuestaSeleccionadaFLag = true;
                 }
                 
-                else if (IsMouseOverRectangle(botonResp4.x, botonResp4.y, botonResp4.width, botonResp4.height)
+                if (IsMouseOverRectangle(botonResp4.x, botonResp4.y, botonResp4.width, botonResp4.height)
                     && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     DrawRectangleRec(botonResp4, GREEN);
                     respSelec = 4;
