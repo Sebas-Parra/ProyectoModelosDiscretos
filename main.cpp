@@ -26,7 +26,7 @@ int main(void)
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
-    // La primera ventana que se verá sera la del menú
+    // La primera ventana que se verÃ¡ sera la del menÃº
     GameScreen currentScreen = LOGO;
 
     int framesCounter = 0; // por necesitmos medir el tiempo de espera
@@ -42,7 +42,7 @@ int main(void)
     Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
     float velocidadBol = 4.0f;
     float scalaP = 2.0f;
-    int frameWidthP = personaje.width / 6;;// Asumiendo que hay 6 frames en la animación
+    int frameWidthP = personaje.width / 6;;// Asumiendo que hay 6 frames en la animaciÃ³n
     int frameHeightP = personaje.height;
     Rectangle sourceRecP = { 0.0f,0.0f,(float)frameWidthP,(float)frameHeightP };
     Rectangle destRecP = { personajePos.x,personajePos.y,frameWidthP * scalaP,frameHeightP * scalaP };
@@ -72,7 +72,7 @@ int main(void)
             // Todo lo que tenga que venir en el logo de la app
             // Solo aqui van a ir los frames por segundo
             // En esta parte solo se debe esperar hasta que pase a la siguiente 
-            // pestaña
+            // pestaÃ±a
             // framesCounter++;
             // if (framesCounter > 300) currentScreen = TITLE;
             if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = GAMEPLAY;
@@ -102,7 +102,7 @@ int main(void)
             DrawText("Hola, soy Chatbot. Escribe tu pregunta:", 10, 10, 20, DARKGRAY);
 
             // Campo de texto para la pregunta del usuario
-            static char text[256] = { 0 }; // Inicializa el texto vacío
+            static char text[256] = { 0 }; // Inicializa el texto vacÃ­o
             static int textLength = 0;
 
             // Captura la entrada del teclado
@@ -112,21 +112,21 @@ int main(void)
                 if ((key >= 32) && (key <= 126) || (key >= 192 && key <= 255)) {
                     if (textLength < sizeof(text) - 1) {
                         text[textLength++] = (char)key;
-                        text[textLength] = '\0'; // Aseguramos que el texto esté terminado en nulo
+                        text[textLength] = '\0'; // Aseguramos que el texto estÃ© terminado en nulo
                     }
                 }
-                key = GetCharPressed(); // Captura el siguiente carácter
+                key = GetCharPressed(); // Captura el siguiente carÃ¡cter
             }
 
             // Manejo del retroceso
             if (IsKeyPressed(KEY_BACKSPACE)) {
                 if (textLength > 0) {
                     textLength--;
-                    text[textLength] = '\0'; // Aseguramos que el texto esté terminado en nulo
+                    text[textLength] = '\0'; // Aseguramos que el texto estÃ© terminado en nulo
                 }
             }
 
-            // Manejo de envío del texto
+            // Manejo de envÃ­o del texto
             if (IsKeyPressed(KEY_ENTER)) {
                 preguntaUsuario = text;
                 // Busca la pregunta en la lista
@@ -152,7 +152,7 @@ int main(void)
             DrawText("Respuesta:", 10, 100, 20, DARKGRAY);
             DrawText(respuesta.c_str(), 10, 130, 20, BLACK);
 
-            // Dibujar el botón de regreso
+            // Dibujar el botÃ³n de regreso
             {
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
@@ -181,14 +181,14 @@ int main(void)
 
         // Draw
         //----------------------------------------------------------------------------------
-        // Aqui es donde va a ir todo el diseño del juego
+        // Aqui es donde va a ir todo el diseÃ±o del juego
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
 
         switch (currentScreen) {
         case LOGO:
-            // Aqui es el diseño del logo
+            // Aqui es el diseÃ±o del logo
             DrawText("Bienvenido a este mundo!!", 300, 150, 30, BLACK);
             DrawText("Presiona Enter para continuar a la siguiente parte", 200, 200, 30, BLACK);
             DrawText("Presiona C para abrir el Chatbot", 200, 250, 30, BLACK);
@@ -200,13 +200,13 @@ int main(void)
             }
             break;
         case GAMEPLAY:
-            // Diseño del juego en si
+            // DiseÃ±o del juego en si
             destRecP.x = personajePos.x;
             destRecP.y = personajePos.y;
             DrawTexturePro(personaje, sourceRecP, destRecP, originP, Rotation, WHITE);
             DrawTexturePro(mesa1, sourceRecM1, destRecM1, originM1, rotation, WHITE);
             DrawText("Aqui va el juego", 0, 0, 30, BLACK);
-            // Dibujar el botón de regreso
+            // Dibujar el botÃ³n de regreso
             {
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
