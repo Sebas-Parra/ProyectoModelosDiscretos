@@ -3,15 +3,22 @@
 #include "Preguntas.h"
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
+#include <ctime>
+#include <vector>
+#include <cstdlib>
 
 //------------------------------------------------------------------------------------
 // Program main entry point
-typedef enum GameScreen { LOGO = 0, GAMEPLAY, CHATBOT } GameScreen;
+typedef enum GameScreen { LOGO = 0, GAMEPLAY,PREGUNTAS, CHATBOT } GameScreen;
 
 bool IsMouseOverRectangle(int x, int y, int ancho, int alto) {
     Vector2 raton = GetMousePosition();
     return (raton.x > x && raton.x < x + ancho && raton.y > y && raton.y < y + alto);
 }
+
+
 //------------------------------------------------------------------------------------
 int main(void)
 {
@@ -36,6 +43,8 @@ int main(void)
     const std::vector<std::string>& listaRespuestas = preguntas.obtenerRespuestas();
     std::string preguntaUsuario = "";
     std::string respuesta = "";
+    bool preguntaSeleccionadaFlag = false;
+    std::string lineaRand = "";
 
     // Aqui se crea el personaje
     Texture2D personaje = LoadTexture("knight_run_spritesheet.png");
@@ -52,14 +61,52 @@ int main(void)
     int currentframes = 0;
     // Aqui se crean los demas objetos
     Texture2D mesa1 = LoadTexture("mesa1.png");
-    Vector2 mesa1Pos = { (float)screenWidth - 750,(float)screenHeight - 450 };
+    Texture2D mesa2 = LoadTexture("mesa2.png");
+    Texture2D mesa3 = LoadTexture("mesa3.png");
+    Texture2D mesa4 = LoadTexture("mesa4.png");
+    //mesa1
+    Vector2 mesa1Pos = { (float)screenWidth - 730,(float)screenHeight - 395 };
     int frameWidthM1 = mesa1.width;
     int frameHeightM1 = mesa1.height;
-    float scalaM1 = 0.2f;
+    float scalaM1 = 2.0f;
     Rectangle sourceRecM1 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
     Rectangle destRecM1 = { mesa1Pos.x,mesa1Pos.y,frameWidthM1 * scalaM1, frameHeightM1 * scalaM1 };
-    Vector2 originM1 = { 0.0f,0.0f };
-    float rotation = 45.0f;
+    Vector2 originM1 = { (frameWidthM1*scalaM1)/2.0f,(frameHeightM1*scalaM1)/2.0f };
+    float rotation = -45.0f;
+    //mesa2
+    Vector2 mesa2Pos = { (float)screenWidth -  450,(float)screenHeight - 445};
+    int frameWidthM2 = mesa2.width;
+    int frameHeightM2 = mesa2.height;
+    float scalaM2 = 2.0f;
+    Rectangle sourceRecM2 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
+    Rectangle destRecM2 = { mesa2Pos.x,mesa2Pos.y,frameWidthM2 * scalaM2, frameHeightM2 * scalaM2 };
+    Vector2 originM2 = { 0.0f,0.0f };
+    float rotationM2 = 0.0f;
+    //mesa3
+    Vector2 mesa3Pos = { (float)screenWidth - 70,(float)screenHeight - 290 };
+    int frameWidthM3 = mesa3.width;
+    int frameHeightM3 = mesa3.height;
+    float scalaM3 = 2.0f;
+    Rectangle sourceRecM3 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
+    Rectangle destRecM3 = { mesa3Pos.x,mesa3Pos.y,frameWidthM3 * scalaM3, frameHeightM3 * scalaM3 };
+    Vector2 originM3 = { (frameWidthM3 * scalaM3) / 2.0f,(frameHeightM3 * scalaM3) / 2.0f };
+    float rotationM3 = 45.0f;
+    //mesa4
+    Vector2 mesa4Pos = { (float)screenWidth - 750,(float)screenHeight - 200 };
+    int frameWidthM4 = mesa4.width;
+    int frameHeightM4 = mesa4.height;
+    float scalaM4 = 2.0f;
+    Rectangle sourceRecM4 = { 0.0f,0.0f,(float)frameWidthM4,(float)frameHeightM4 };
+    Rectangle destRecM4 = { mesa4Pos.x,mesa4Pos.y,frameWidthM4 * scalaM4, frameHeightM4 * scalaM4 };
+    Vector2 originM4 = { (frameWidthM4 * scalaM4) / 2.0f,(frameHeightM4 * scalaM4) / 2.0f };
+    float rotationM4 = 45.0f;
+
+    //----------------------------------------------------------------------------
+    Rectangle botonPregunta = { screenWidth - 799,screenHeight - 20,110,40 };
+    Rectangle botonRegresoGameplay = { screenWidth - 790, screenHeight - 440,90,40 };
+    Rectangle botonInfo = { screenWidth - 790, screenHeight - 50, 85,35 };
+    Rectangle cuadroInfo = { screenWidth - 790, screenHeight - 150, 50,50 };
+    //---------------------------------------------------------------------------------
 
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -98,6 +145,17 @@ int main(void)
 
             break;
         }
+        case PREGUNTAS:
+            if (IsMouseOverRectangle(botonRegresoGameplay.x, botonRegresoGameplay.y, botonRegresoGameplay.width, botonRegresoGameplay.height)
+                && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                currentScreen = GAMEPLAY;
+                lineaRand = "";
+                preguntaSeleccionadaFlag = false;
+            }
+
+            
+
+            break;
         case CHATBOT: {
             // Campo de texto para la pregunta del usuario
             static char text[256] = { 0 }; // Inicializa el texto vacío
@@ -166,9 +224,9 @@ int main(void)
         switch (currentScreen) {
         case LOGO:
             // Aqui es el diseño del logo
-            DrawText("Bienvenido a este mundo!!", 300, 150, 30, BLACK);
-            DrawText("Presiona Enter para continuar a la siguiente parte", 200, 200, 30, BLACK);
-            DrawText("Presiona C para abrir el Chatbot", 200, 250, 30, BLACK);
+            DrawText("Bienvenido a este mundo!!", screenWidth-600, 150, 30, BLACK);
+            DrawText("Presiona Enter para controlar bot", 120, 200, 30, BLACK);
+            DrawText("Presiona C para abrir el Chatbot", 130, 250, 30, BLACK);
             {
                 int textWidth = MeasureText("Presiona ESC para salir", 30);
                 int screenW = GetScreenWidth();
@@ -182,7 +240,9 @@ int main(void)
             destRecP.y = personajePos.y;
             DrawTexturePro(personaje, sourceRecP, destRecP, originP, Rotation, WHITE);
             DrawTexturePro(mesa1, sourceRecM1, destRecM1, originM1, rotation, WHITE);
-            DrawText("Aqui va el juego", 0, 0, 30, BLACK);
+            DrawTexturePro(mesa2,sourceRecM2,destRecM2,originM2,rotationM2,WHITE);
+            DrawTexturePro(mesa3, sourceRecM3, destRecM3, originM3, rotationM3, WHITE);
+            DrawTexturePro(mesa4, sourceRecM4, destRecM4, originM4, rotationM4, WHITE);
             // Dibujar el botón de regreso
             {
                 int screenW = GetScreenWidth();
@@ -203,7 +263,84 @@ int main(void)
                 int textWidth = MeasureText("Presiona ESC para salir", 20);
                 DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 20, PINK);
             }
+
+
+            if (CheckCollisionRecs(destRecP, destRecM1)) {
+                botonPregunta.x = 800 - 790;
+                botonPregunta.y = 450 - 50;
+                DrawRectangleRec(botonPregunta, BLUE);
+                DrawText("Responder", screenWidth-790,screenHeight-41,20,BLACK);
+                if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
+                    IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    currentScreen = PREGUNTAS;
+                }
+            }
+            else if (CheckCollisionRecs(destRecP, destRecM2)) {
+                botonPregunta.x = 800 - 790;
+                botonPregunta.y = 450 - 50;
+                DrawRectangleRec(botonPregunta, BLUE);
+                DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
+                if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
+                    IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    currentScreen = PREGUNTAS;
+                }
+            }
+            else if (CheckCollisionRecs(destRecP, destRecM3)) {
+                botonPregunta.x = 800 - 790;
+                botonPregunta.y = 450 - 50;
+                DrawRectangleRec(botonPregunta, BLUE);
+                DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
+                if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
+                    IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    currentScreen = PREGUNTAS;
+                }
+            }
+            else if (CheckCollisionRecs(destRecP, destRecM4)) {
+                botonPregunta.x = 800 - 790;
+                botonPregunta.y = 450 - 50;
+                DrawRectangleRec(botonPregunta, BLUE);
+                DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
+                if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
+                    IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    currentScreen = PREGUNTAS;
+                }
+            }
             break;
+        case PREGUNTAS: {
+            if(!preguntaSeleccionadaFlag){
+            std::ifstream archivo("Aprendido.txt");
+            if (!archivo.is_open()) {
+                std::cerr << "No se pudo abrir el archivo: " << std::endl;
+                return 1;
+            }
+
+            std::string linea;
+            std::vector<std::string> LineaPregunta;
+            int lineaNumero = 0;
+            while (std::getline(archivo, linea)) {
+                if (linea.find('¿') != std::string::npos) {
+                    LineaPregunta.push_back(linea);
+                }
+            }
+
+            std::srand(std::time(nullptr));
+            int indice = std::rand() % LineaPregunta.size();
+            lineaRand = LineaPregunta[indice];
+            archivo.close();
+
+            preguntaSeleccionadaFlag = true;          
+            }
+            const char* lin = lineaRand.c_str();
+            DrawText(lin, screenWidth - 750, screenHeight - 300, 20, BLACK);
+            DrawRectangleRec(botonRegresoGameplay, BLUE);
+            DrawText("Volver", screenWidth - 780, screenHeight - 435, 20, BLACK);
+            DrawRectangleRec(botonInfo, GREEN);
+            DrawText("Ayuda", screenWidth - 780, screenHeight - 40, 20, BLACK);
+            if (CheckCollisionPointRec(GetMousePosition(), botonInfo)) {
+                DrawRectangleRec(cuadroInfo, GREEN);
+            }
+            break;
+        }
         case CHATBOT:
             DrawText("Hola, soy Chatbot. Escribe tu pregunta:", 10, 10, 20, DARKGRAY);
             
@@ -237,6 +374,9 @@ int main(void)
     //--------------------------------------------------------------------------------------
     UnloadTexture(personaje);
     UnloadTexture(mesa1);
+    UnloadTexture(mesa2);
+    UnloadTexture(mesa3);
+    UnloadTexture(mesa4);
     CloseWindow(); // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
