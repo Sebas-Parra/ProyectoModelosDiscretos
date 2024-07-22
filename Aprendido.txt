@@ -32,3 +32,52 @@ B) Es una proposición que se asume sin evidencia.
 C) Es una proposición que se deriva lógicamente de las premisas.
 D) Es una proposición que siempre es verdadera sin importar las premisas.
 RESPUESTA: C
+
+PREGUNTA: ¿Qué es una proposición en lógica?
+A) Una expresión que siempre es verdadera.
+B) Una declaración que puede ser verdadera o falsa.
+C) Una pregunta que necesita una respuesta.
+D) Una declaración que siempre es falsa.
+RESPUESTA: B
+
+PREGUNTA: ¿Qué es la ley de la doble negación en lógica proposicional?
+A) ¬(P y Q) equivalente ¬P o ¬Q
+B) P o ¬P equivalente P
+C) ¬(¬P) equivalente P
+D) P y ¬P equivalente P
+RESPUESTA: C
+
+PREGUNTA: ¿Qué representa la cuantificación universal en lógica?
+A) Existe al menos un elemento en el dominio que hace verdadera una proposición.
+B) Todos los elementos en el dominio hacen verdadera una proposición.
+C) Ningún elemento en el dominio hace verdadera una proposición.
+D) La proposición es verdadera solo para elementos específicos en el dominio.
+RESPUESTA: B
+
+PREGUNTA: ¿Qué representa la cuantificación existencial en lógica?
+A) Existe al menos un elemento en el dominio que hace verdadera una proposición.
+B) Todos los elementos en el dominio hacen verdadera una proposición.
+C) Ningún elemento en el dominio hace verdadera una proposición.
+D) La proposición es verdadera solo para elementos específicos en el dominio.
+RESPUESTA: A
+
+PREGUNTA: ¿Qué es la complejidad temporal de un algoritmo?
+A) La cantidad de memoria requerida por el algoritmo.
+B) La cantidad de pasos que toma el algoritmo para completarse.
+C) La eficiencia con la que el algoritmo maneja entradas paralelas.
+D) La precisión con la que el algoritmo produce resultados.
+RESPUESTA: B
+
+PREGUNTA: ¿Qué es la notación Big-O?
+A) Una forma de describir el caso mejor de un algoritmo.
+B) Una forma de describir el caso peor de un algoritmo.
+C) Una forma de describir el tiempo promedio de un algoritmo.
+D) Una forma de describir la memoria promedio usada por un algoritmo.
+RESPUESTA: B
+
+PREGUNTA: ¿Qué representa el teorema de la deducción en lógica proposicional?
+A) Si P entonces Q es verdadero si Q entonces P es verdadero.
+B) Si P y Q entonces R es verdadero, entonces P es verdadero.
+C) Si P entonces Q es verdadero, entonces Q entonces P es verdadero.
+D) Si P entonces Q es verdadero, entonces P entonces Q es verdadero.
+RESPUESTA: D
