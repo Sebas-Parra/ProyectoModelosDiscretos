@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <ctime>
-#include <vector>
 #include <cstdlib>
 
 //------------------------------------------------------------------------------------
@@ -41,12 +40,17 @@ int main(void)
     Preguntas preguntas("Aprendido.txt");
     const std::vector<std::string>& listaPreguntas = preguntas.obtenerPreguntas();
     const std::vector<std::string>& listaRespuestas = preguntas.obtenerRespuestas();
+    const std::vector<std::vector<std::string>>& listaOpciones = preguntas.obtenerOpciones();
     std::string preguntaUsuario = "";
+    int preguntaIndex = 0;
     std::string respuesta = "";
     bool preguntaSeleccionadaFlag = false;
     std::string lineaRand = "";
     bool respuestaSeleccionadaFLag = false;
     int respSelec = -1; //No se ha seleccionado ninguna respuesta
+    bool mostrarResultado = false;
+    bool respuestaCorrecta = false;
+    float tiempoInicio = 0.0f;
 
     // Aqui se crea el personaje
     Texture2D personaje = LoadTexture("Robot.png");
@@ -113,7 +117,8 @@ int main(void)
     Rectangle botonResp2 = { screenWidth - 690,screenHeight - 290, 20, 20 };
     Rectangle botonResp3 = { screenWidth - 690, screenHeight - 260, 20, 20 };
     Rectangle botonResp4 = { screenWidth - 690,screenHeight - 230,20,20 };
-    Rectangle botonEnviarResp = { screenWidth - 690, screenHeight - 200, 68,20 };
+    Rectangle botonEnviarResp = { screenWidth - 110, screenHeight - 60, 100,50 };
+    Color botonColor = BLUE;
     //---------------------------------------------------------------------------------
 
     // Main game loop
@@ -154,21 +159,7 @@ int main(void)
             break;
         }
         case PREGUNTAS:
-            if (IsMouseOverRectangle(botonRegresoGameplay.x, botonRegresoGameplay.y, botonRegresoGameplay.width, botonRegresoGameplay.height)
-                && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                currentScreen = GAMEPLAY;
-                lineaRand = "";
-                preguntaSeleccionadaFlag = false;
-            }
-
-
-            if (IsMouseOverRectangle(botonEnviarResp.x, botonEnviarResp.y, botonEnviarResp.width, botonEnviarResp.height) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                currentScreen = GAMEPLAY;
-                lineaRand = "";
-                respuestaSeleccionadaFLag = false;
-                preguntaSeleccionadaFlag = false;
-                respSelec = -1;
-            }
+            
             
             
             break;
@@ -323,75 +314,127 @@ int main(void)
             }
             break;
         case PREGUNTAS: {
-            if(!preguntaSeleccionadaFlag){
-            std::ifstream archivo("Aprendido.txt");
-            if (!archivo.is_open()) {
-                std::cerr << "No se pudo abrir el archivo: " << std::endl;
-                return 1;
+            static bool mensajeAdvertenciaFlag = false;
+            static float tiempoInicioAdvertencia = 0;
+            if (!preguntaSeleccionadaFlag) {
+                // Seleccionar una pregunta aleatoria
+                std::srand(std::time(nullptr));
+                preguntaIndex = std::rand() % listaPreguntas.size();
+                lineaRand = listaPreguntas[preguntaIndex];
+                preguntaSeleccionadaFlag = true;
+
+                // Configurar opciones
+                const std::vector<std::string>& opciones = listaOpciones[preguntaIndex];
+                // Asignar opciones a los botones
+                botonResp1.y = 100;
+                botonResp2.y = 160;
+                botonResp3.y = 220;
+                botonResp4.y = 280;
             }
 
-            std::string linea;
-            std::vector<std::string> LineaPregunta;
-            int lineaNumero = 0;
-            while (std::getline(archivo, linea)) {
-                if (linea.find('¿') != std::string::npos) {
-                    LineaPregunta.push_back(linea);
-                }
-            }
-
-            std::srand(std::time(nullptr));
-            int indice = std::rand() % LineaPregunta.size();
-            lineaRand = LineaPregunta[indice];
-            archivo.close();
-
-            preguntaSeleccionadaFlag = true;          
-            }
-            const char* lin = lineaRand.c_str();
-            DrawText(lin, screenWidth - 690, screenHeight - 350, 20, BLACK);
-            DrawRectangleRec(botonRegresoGameplay, BLUE);
-            DrawText("Volver", screenWidth - 780, screenHeight - 435, 20, BLACK);
-            DrawRectangleRec(botonInfo, GREEN);
-            DrawText("Ayuda", screenWidth - 780, screenHeight - 40, 20, BLACK);
-            if (CheckCollisionPointRec(GetMousePosition(), botonInfo)) {
-                DrawRectangleRec(cuadroInfo, GREEN);
-            }
-            DrawRectangleRec(botonResp1, respSelec == 1 ? GREEN:BLACK);
+            // Dibuja la pregunta y las opciones
+            DrawText(lineaRand.c_str(), 50, 50, 20, BLACK);
+            DrawRectangleRec(botonResp1, respSelec == 1 ? GREEN : BLACK);
             DrawRectangleRec(botonResp2, respSelec == 2 ? GREEN : BLACK);
             DrawRectangleRec(botonResp3, respSelec == 3 ? GREEN : BLACK);
             DrawRectangleRec(botonResp4, respSelec == 4 ? GREEN : BLACK);
-            if (!respuestaSeleccionadaFLag) {
-                
+            DrawRectangleRec(botonEnviarResp, botonColor);
+            DrawText("Enviar", botonEnviarResp.x + 10, botonEnviarResp.y + 10, 20, BLACK);
 
-                if (IsMouseOverRectangle(botonResp1.x, botonResp1.y, botonResp1.width, botonResp1.height)
-                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    DrawRectangleRec(botonResp1, GREEN);
+            // Mostrar opciones
+            const std::vector<std::string>& opciones = listaOpciones[preguntaIndex];
+            DrawText(opciones[0].c_str(), botonResp1.x + 10, botonResp1.y + 10, 20, BLACK);
+            DrawText(opciones[1].c_str(), botonResp2.x + 10, botonResp2.y + 10, 20, BLACK);
+            DrawText(opciones[2].c_str(), botonResp3.x + 10, botonResp3.y + 10, 20, BLACK);
+            DrawText(opciones[3].c_str(), botonResp4.x + 10, botonResp4.y + 10, 20, BLACK);
+
+            // Manejo de clics en las opciones
+            if (!respuestaSeleccionadaFLag) {
+                Vector2 mousePos = GetMousePosition();
+
+                if (CheckCollisionPointRec(mousePos, botonResp1) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 1;
-                    respuestaSeleccionadaFLag = true;                    
+                    respuestaSeleccionadaFLag = true;
                 }
-                
-                if (IsMouseOverRectangle(botonResp2.x, botonResp2.y, botonResp2.width, botonResp2.height)
-                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    DrawRectangleRec(botonResp2, GREEN);
+                if (CheckCollisionPointRec(mousePos, botonResp2) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 2;
                     respuestaSeleccionadaFLag = true;
                 }
-                
-                if (IsMouseOverRectangle(botonResp3.x, botonResp3.y, botonResp3.width, botonResp3.height)
-                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    DrawRectangleRec(botonResp3, GREEN);
+                if (CheckCollisionPointRec(mousePos, botonResp3) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 3;
                     respuestaSeleccionadaFLag = true;
                 }
-                
-                if (IsMouseOverRectangle(botonResp4.x, botonResp4.y, botonResp4.width, botonResp4.height)
-                    && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    DrawRectangleRec(botonResp4, GREEN);
+                if (CheckCollisionPointRec(mousePos, botonResp4) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 4;
                     respuestaSeleccionadaFLag = true;
                 }
             }
-            DrawRectangleRec(botonEnviarResp,BLUE);
-            DrawText("Enviar", screenWidth-689,screenHeight - 198, 20,BLACK);
+
+            // Manejo de clics en el botón Enviar
+            if (CheckCollisionPointRec(GetMousePosition(), botonEnviarResp) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (respuestaSeleccionadaFLag) {
+                    respuestaCorrecta = (listaRespuestas[preguntaIndex] == std::to_string(respSelec));
+                    mostrarResultado = true;
+                    tiempoInicio = GetTime(); // Guardar el tiempo en que se muestra el resultado
+                    preguntaSeleccionadaFlag = false; // Permite seleccionar una nueva pregunta
+                    respuestaSeleccionadaFLag = false; // Permite seleccionar una nueva respuesta
+                    respSelec = -1; // Restablecer selección de respuesta
+                    
+                }
+                else {
+                    if (!mensajeAdvertenciaFlag) {
+                        tiempoInicioAdvertencia = GetTime(); // Guardar el tiempo en que se muestra la advertencia
+                        mensajeAdvertenciaFlag = true; // Activar la advertencia
+                    }
+
+                }
+            }
+
+            // Mostrar mensaje de advertencia durante 3 segundos
+            if (mensajeAdvertenciaFlag) {
+                float tiempoActual = GetTime();
+                if (tiempoActual - tiempoInicioAdvertencia <= 3) {
+                    DrawText("Seleccione una opción antes de enviar.", 100, 400, 20, RED);
+                }
+                else {
+                    mensajeAdvertenciaFlag = false; // Desactivar la advertencia después de 3 segundos
+                }
+            }
+
+            // Mostrar mensaje de respuesta durante 3 segundos
+            if (mostrarResultado) {
+                float tiempoActual = GetTime();
+                if (respuestaCorrecta) {
+                    DrawText("Respuesta correcta", 100, 400, 20, GREEN);
+                }
+                else {
+                    DrawText("Respuesta incorrecta", 100, 400, 20, RED);
+                }
+
+                // Mostrar el resultado durante 3 segundos
+                if (tiempoActual - tiempoInicio > 3) {
+                    mostrarResultado = false;
+                    //currentScreen = GAMEPLAY;
+                }
+            }
+
+            // Dibuja los botones adicionales
+            DrawRectangleRec(botonRegresoGameplay, BLUE);
+            DrawText("Volver", botonRegresoGameplay.x + 10, botonRegresoGameplay.y + 10, 20, BLACK);
+            DrawRectangleRec(botonInfo, GREEN);
+            DrawText("Ayuda", botonInfo.x + 10, botonInfo.y + 10, 20, BLACK);
+
+            // Manejo de clics en el botón Volver
+            if (CheckCollisionPointRec(GetMousePosition(), botonRegresoGameplay) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                // Cambia al estado GAMEPLAY o el estado que corresponda
+                currentScreen = GAMEPLAY;
+            }
+
+            // Manejo de clics en el botón Ayuda
+            if (CheckCollisionPointRec(GetMousePosition(), botonInfo) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                // Mostrar información de ayuda
+                // Ejemplo de cómo manejar la ayuda
+            }
             break;
         }
         case CHATBOT:
