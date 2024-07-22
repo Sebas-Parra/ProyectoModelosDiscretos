@@ -51,6 +51,7 @@ int main(void)
     bool mostrarResultado = false;
     bool respuestaCorrecta = false;
     float tiempoInicio = 0.0f;
+    std::string letra = "";
 
     // Aqui se crea el personaje
     Texture2D personaje = LoadTexture("Robot.png");
@@ -336,18 +337,22 @@ int main(void)
 
                 if (CheckCollisionPointRec(mousePos, botonResp1) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 1;
+                    letra = 'A';
                     respuestaSeleccionadaFLag = true;
                 }
                 if (CheckCollisionPointRec(mousePos, botonResp2) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 2;
+                    letra = 'B';
                     respuestaSeleccionadaFLag = true;
                 }
                 if (CheckCollisionPointRec(mousePos, botonResp3) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 3;
+                    letra = 'C';
                     respuestaSeleccionadaFLag = true;
                 }
                 if (CheckCollisionPointRec(mousePos, botonResp4) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     respSelec = 4;
+                    letra = 'D';
                     respuestaSeleccionadaFLag = true;
                 }
             }
@@ -355,7 +360,8 @@ int main(void)
             // Manejo de clics en el botón Enviar
             if (CheckCollisionPointRec(GetMousePosition(), botonEnviarResp) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if (respuestaSeleccionadaFLag) {
-                    respuestaCorrecta = (listaRespuestas[preguntaIndex] == std::to_string(respSelec));
+                    std::string aux=listaRespuestas[preguntaIndex];
+                    respuestaCorrecta = (aux.substr(1) == letra);
                     mostrarResultado = true;
                     tiempoInicio = GetTime(); // Guardar el tiempo en que se muestra el resultado
                     preguntaSeleccionadaFlag = false; // Permite seleccionar una nueva pregunta
@@ -376,7 +382,7 @@ int main(void)
             if (mensajeAdvertenciaFlag) {
                 float tiempoActual = GetTime();
                 if (tiempoActual - tiempoInicioAdvertencia <= 3) {
-                    DrawText("Seleccione una opción antes de enviar.", 100, 400, 20, RED);
+                    DrawText("Seleccione una opcion antes de enviar.", 100, 400, 20, RED);
                 }
                 else {
                     mensajeAdvertenciaFlag = false; // Desactivar la advertencia después de 3 segundos
