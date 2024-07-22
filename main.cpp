@@ -164,15 +164,12 @@ int main(void)
             
             break;
         case CHATBOT: {
-            // Campo de texto para la pregunta del usuario
             static char text[256] = { 0 }; // Inicializa el texto vacío
             static int textLength = 0;
 
-            // Captura la entrada del teclado
             int key = GetCharPressed();
             while (key > 0) {
-                // Solo capturamos caracteres imprimibles, incluyendo caracteres especiales
-                if ((key >= 32) && (key <= 126) || (key >= 192 && key <= 255) ) {
+                if ((key >= 32) && (key <= 126) || (key >= 192 && key <= 255)) {
                     if (textLength < sizeof(text) - 1) {
                         text[textLength++] = (char)key;
                         text[textLength] = '\0'; // Aseguramos que el texto esté terminado en nulo
@@ -181,7 +178,6 @@ int main(void)
                 key = GetCharPressed(); // Captura el siguiente carácter
             }
 
-            // Manejo del retroceso
             if (IsKeyPressed(KEY_BACKSPACE)) {
                 if (textLength > 0) {
                     textLength--;
@@ -189,33 +185,19 @@ int main(void)
                 }
             }
 
-            // Manejo de envío del texto
             if (IsKeyPressed(KEY_ENTER)) {
                 preguntaUsuario = text;
-                // Busca la pregunta en la lista
-                bool encontrada = false;
-                for (int i = 0; i < listaPreguntas.size(); i++) {
-                    if (preguntaUsuario == listaPreguntas[i]) {
-                        respuesta = listaRespuestas[i];
-                        encontrada = true;
-                        break;
-                    }
-                }
-                if (!encontrada) {
-                    respuesta = "No se la respuesta a tu pregunta.";
-                }
+                respuesta = preguntas.obtenerOpcionCorrecta(text);
+
                 textLength = 0; // Limpiar el campo de texto
             }
 
-            // Mostrar el campo de texto
             DrawRectangle(10, 50, 780, 40, LIGHTGRAY);
             DrawText(text, 20, 55, 20, DARKGRAY);
 
-            // Mostrar la respuesta de la pregunta
             DrawText("Respuesta:", 10, 100, 20, DARKGRAY);
             DrawText(respuesta.c_str(), 10, 130, 20, BLACK);
 
-            
             break;
         }
         }

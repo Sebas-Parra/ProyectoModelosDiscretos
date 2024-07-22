@@ -65,6 +65,20 @@ public:
     const vector<string>& obtenerRespuestas() const {
         return respuestas;
     }
+    string obtenerOpcionCorrecta(const string& preguntaUsuario) const {
+        for (int i = 0; i < preguntas.size(); i++) {
+            if (preguntaUsuario == preguntas[i]) {
+                string respuestaCorrecta = respuestas[i];
+                const auto& opcionesPregunta = opciones[i];
+                for (const auto& opcion : opcionesPregunta) {
+                    if (opcion.substr(0, 1) == respuestaCorrecta.substr(1)) {
+                        return opcion; // La opción correcta con el concepto
+                    }
+                }
+            }
+        }
+        return "No se la respuesta a tu pregunta";
+    }
 };
 
 #endif // PREGUNTAS_H
