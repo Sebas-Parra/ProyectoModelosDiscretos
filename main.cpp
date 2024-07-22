@@ -26,7 +26,7 @@ int main(void)
     const int screenWidth = 800; // Ancho
     const int screenHeight = 450; // Altura
 
-    InitWindow(screenWidth, screenHeight, "Proyecto Grupol");
+    InitWindow(screenWidth, screenHeight, "Proyecto Grupal");
     SetWindowState(FLAG_WINDOW_RESIZABLE); // Hacer la ventana redimensionable
 
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
@@ -53,11 +53,13 @@ int main(void)
     float tiempoInicio = 0.0f;
     std::string letra = "";
 
+    Preguntas chatBot("Preguntas.txt");
+
     // Aqui se crea el personaje
     Texture2D personaje = LoadTexture("Robot.png");
     Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
     float velocidadBol = 4.0f;
-    float scalaP = 2.0f;
+    float scalaP = 2.5f;
     int frameWidthP = personaje.width / 8;// Asumiendo que hay 6 frames en la animación
     int frameHeightP = personaje.height;
     Rectangle sourceRecP = { 0.0f,0.0f,(float)frameWidthP,(float)frameHeightP };
@@ -67,46 +69,66 @@ int main(void)
     int framesCouter = 0;
     int currentframes = 0;
     // Aqui se crean los demas objetos
+    Texture2D menuPrincipal = LoadTexture("menu.png");
+    Texture2D fondo = LoadTexture("pantalla_principal.png");
     Texture2D mesa1 = LoadTexture("mesa1.png");
     Texture2D mesa2 = LoadTexture("mesa2.png");
     Texture2D mesa3 = LoadTexture("mesa3.png");
     Texture2D mesa4 = LoadTexture("mesa4.png");
+    //menu
+    Vector2 menuPos = { (float)screenWidth - 799,(float)screenHeight - 449 };
+    int frameWidthMe = menuPrincipal.width;
+    int frameHeightMe = menuPrincipal.height;
+    float scalaMe = 3.5f;
+    Rectangle sourceRecMe = { 0.0f,0.0f,(float)frameWidthMe,(float)frameHeightMe };
+    Rectangle destRecMe = { menuPos.x,menuPos.y,frameWidthMe * scalaMe + 11, frameHeightMe * scalaMe - 18 };
+    Vector2 originMe = { 0.0f,0.0f };
+    float rotationMe = 0.0f;
+    //fondo
+    Vector2 fondoPos = { (float)screenWidth - 799,(float)screenHeight - 449 };
+    int frameWidthF = fondo.width;
+    int frameHeightF = fondo.height;
+    float scalaF = 3.5f;
+    Rectangle sourceRecF = { 0.0f,0.0f,(float)frameWidthF,(float)frameHeightF };
+    Rectangle destRecF = { fondoPos.x,fondoPos.y,frameWidthF * scalaF + 11, frameHeightF * scalaF - 18 };
+    Vector2 originF = { 0.0f,0.0f };
+    float rotationF = 0.0f;
     //mesa1
-    Vector2 mesa1Pos = { (float)screenWidth - 730,(float)screenHeight - 395 };
+    Vector2 mesa1Pos = { (float)screenWidth - 717,(float)screenHeight - 395 };
     int frameWidthM1 = mesa1.width;
     int frameHeightM1 = mesa1.height;
-    float scalaM1 = 2.0f;
+    float scalaM1 = 3.0f;
     Rectangle sourceRecM1 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
     Rectangle destRecM1 = { mesa1Pos.x,mesa1Pos.y,frameWidthM1 * scalaM1, frameHeightM1 * scalaM1 };
-    Vector2 originM1 = { (frameWidthM1*scalaM1)/2.0f,(frameHeightM1*scalaM1)/2.0f };
-    float rotation = -45.0f;
+    Vector2 originM1 = { (frameWidthM1 * scalaM1) / 2.0f,(frameHeightM1 * scalaM1) / 2.0f };
+    float rotation = 0.0f;
     //mesa2
-    Vector2 mesa2Pos = { (float)screenWidth -  450,(float)screenHeight - 445};
+    Vector2 mesa2Pos = { (float)screenWidth - 717,(float)screenHeight - 150 };
     int frameWidthM2 = mesa2.width;
     int frameHeightM2 = mesa2.height;
-    float scalaM2 = 2.0f;
-    Rectangle sourceRecM2 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
+    float scalaM2 = 3.0f;
+    Rectangle sourceRecM2 = { 0.0f,0.0f,(float)frameWidthM2,(float)frameHeightM2 };
     Rectangle destRecM2 = { mesa2Pos.x,mesa2Pos.y,frameWidthM2 * scalaM2, frameHeightM2 * scalaM2 };
-    Vector2 originM2 = { 0.0f,0.0f };
+    Vector2 originM2 = { (frameWidthM2 * scalaM2) / 2.0f,(frameHeightM2 * scalaM2) / 2.0f };
     float rotationM2 = 0.0f;
     //mesa3
-    Vector2 mesa3Pos = { (float)screenWidth - 70,(float)screenHeight - 290 };
+    Vector2 mesa3Pos = { (float)screenWidth - 70,(float)screenHeight - 325 };
     int frameWidthM3 = mesa3.width;
     int frameHeightM3 = mesa3.height;
-    float scalaM3 = 2.0f;
-    Rectangle sourceRecM3 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
+    float scalaM3 = 3.0f;
+    Rectangle sourceRecM3 = { 0.0f,0.0f,(float)frameWidthM3,(float)frameHeightM3 };
     Rectangle destRecM3 = { mesa3Pos.x,mesa3Pos.y,frameWidthM3 * scalaM3, frameHeightM3 * scalaM3 };
     Vector2 originM3 = { (frameWidthM3 * scalaM3) / 2.0f,(frameHeightM3 * scalaM3) / 2.0f };
-    float rotationM3 = 45.0f;
+    float rotationM3 = 0.0f;
     //mesa4
-    Vector2 mesa4Pos = { (float)screenWidth - 750,(float)screenHeight - 200 };
+    Vector2 mesa4Pos = { (float)screenWidth - 70,(float)screenHeight - 150 };
     int frameWidthM4 = mesa4.width;
     int frameHeightM4 = mesa4.height;
-    float scalaM4 = 2.0f;
+    float scalaM4 = 3.0f;
     Rectangle sourceRecM4 = { 0.0f,0.0f,(float)frameWidthM4,(float)frameHeightM4 };
     Rectangle destRecM4 = { mesa4Pos.x,mesa4Pos.y,frameWidthM4 * scalaM4, frameHeightM4 * scalaM4 };
     Vector2 originM4 = { (frameWidthM4 * scalaM4) / 2.0f,(frameHeightM4 * scalaM4) / 2.0f };
-    float rotationM4 = 45.0f;
+    float rotationM4 = 0.0f;
 
     //----------------------------------------------------------------------------
     Rectangle botonPregunta = { screenWidth - 799,screenHeight - 20,110,40 };
@@ -114,10 +136,10 @@ int main(void)
     Rectangle botonInfo = { screenWidth - 790, screenHeight - 50, 85,35 };
     Rectangle cuadroInfo = { screenWidth - 790, screenHeight - 150, 50,50 };
 
-    Rectangle botonResp1 = { screenWidth - 690, screenHeight - 320, 20,20 };
-    Rectangle botonResp2 = { screenWidth - 690,screenHeight - 290, 20, 20 };
-    Rectangle botonResp3 = { screenWidth - 690, screenHeight - 260, 20, 20 };
-    Rectangle botonResp4 = { screenWidth - 690,screenHeight - 230,20,20 };
+    Rectangle botonResp1 = { screenWidth - 750, screenHeight - 320, 20,20 };
+    Rectangle botonResp2 = { screenWidth - 750,screenHeight - 290, 20, 20 };
+    Rectangle botonResp3 = { screenWidth - 750, screenHeight - 260, 20, 20 };
+    Rectangle botonResp4 = { screenWidth - 750,screenHeight - 230,20,20 };
     Rectangle botonEnviarResp = { screenWidth - 110, screenHeight - 60, 100,50 };
     Color botonColor = BLUE;
     //---------------------------------------------------------------------------------
@@ -136,6 +158,7 @@ int main(void)
             // pestaña
             // framesCounter++;
             // if (framesCounter > 300) currentScreen = TITLE;
+            DrawTexturePro(menuPrincipal, sourceRecMe, destRecMe, originMe, rotationMe, WHITE);
             if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = GAMEPLAY;
             if (IsKeyPressed(KEY_C)) currentScreen = CHATBOT;
             break;
@@ -188,7 +211,7 @@ int main(void)
 
             if (IsKeyPressed(KEY_ENTER)) {
                 preguntaUsuario = text;
-                respuesta = preguntas.obtenerOpcionCorrecta(text);
+                respuesta = chatBot.obtenerOpcionCorrecta(text);
 
                 textLength = 0; // Limpiar el campo de texto
             }
@@ -214,9 +237,9 @@ int main(void)
         switch (currentScreen) {
         case LOGO:
             // Aqui es el diseño del logo
-            DrawText("Bienvenido a este mundo!!", screenWidth-600, 150, 30, BLACK);
-            DrawText("Presiona Enter para controlar bot", 120, 200, 30, BLACK);
-            DrawText("Presiona C para abrir el Chatbot", 130, 250, 30, BLACK);
+            DrawText("Bienvenidos a todos!!", screenWidth - 540, 170, 30, BLACK);
+            DrawText("Presiona Enter para controlar bot", 210, 250, 22, BLACK);
+            DrawText("Presiona C para abrir el Chatbot", 204, 360, 25, BLACK);
             {
                 int textWidth = MeasureText("Presiona ESC para salir", 30);
                 int screenW = GetScreenWidth();
@@ -226,6 +249,8 @@ int main(void)
             break;
         case GAMEPLAY:
             // Diseño del juego en si
+
+            DrawTexturePro(fondo, sourceRecF, destRecF, originF, rotationF, WHITE);
             destRecP.x = personajePos.x;
             destRecP.y = personajePos.y;
             DrawTexturePro(personaje, sourceRecP, destRecP, originP, Rotation, WHITE);
@@ -258,7 +283,7 @@ int main(void)
             if (CheckCollisionRecs(destRecP, destRecM1)) {
                 botonPregunta.x = 800 - 790;
                 botonPregunta.y = 450 - 50;
-                DrawRectangleRec(botonPregunta, BLUE);
+                DrawRectangleRec(botonPregunta, GRAY);
                 DrawText("Responder", screenWidth-790,screenHeight-41,20,BLACK);
                 if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
                     IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -268,7 +293,7 @@ int main(void)
             else if (CheckCollisionRecs(destRecP, destRecM2)) {
                 botonPregunta.x = 800 - 790;
                 botonPregunta.y = 450 - 50;
-                DrawRectangleRec(botonPregunta, BLUE);
+                DrawRectangleRec(botonPregunta, GRAY);
                 DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
                 if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
                     IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -278,7 +303,7 @@ int main(void)
             else if (CheckCollisionRecs(destRecP, destRecM3)) {
                 botonPregunta.x = 800 - 790;
                 botonPregunta.y = 450 - 50;
-                DrawRectangleRec(botonPregunta, BLUE);
+                DrawRectangleRec(botonPregunta, GRAY);
                 DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
                 if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
                     IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -288,7 +313,7 @@ int main(void)
             else if (CheckCollisionRecs(destRecP, destRecM4)) {
                 botonPregunta.x = 800 - 790;
                 botonPregunta.y = 450 - 50;
-                DrawRectangleRec(botonPregunta, BLUE);
+                DrawRectangleRec(botonPregunta, GRAY);
                 DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
                 if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
                     IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -393,7 +418,20 @@ int main(void)
             if (mostrarResultado) {
                 float tiempoActual = GetTime();
                 if (respuestaCorrecta) {
+                    std::fstream archivo("Preguntas.txt", std::ios::in | std::ios::out | std::ios::app);
+                    if (archivo.is_open()) {
+                        archivo.seekp(0, std::ios::end);
+                        archivo << "PREGUNTA: " << lineaRand << "\n";
+                        archivo << opciones[0] << "\n";
+                        archivo << opciones[1] << "\n";
+                        archivo << opciones[2] << "\n";
+                        archivo << opciones[3] << "\n";
+                        archivo << "RESPUESTA: " << letra << "\n";
+
+                        archivo.close();
+                    }
                     DrawText("Respuesta correcta", 100, 400, 20, GREEN);
+                    currentScreen = GAMEPLAY;
                 }
                 else {
                     DrawText("Respuesta incorrecta", 100, 400, 20, RED);
@@ -409,8 +447,8 @@ int main(void)
             // Dibuja los botones adicionales
             DrawRectangleRec(botonRegresoGameplay, BLUE);
             DrawText("Volver", botonRegresoGameplay.x + 10, botonRegresoGameplay.y + 10, 20, BLACK);
-            DrawRectangleRec(botonInfo, GREEN);
-            DrawText("Ayuda", botonInfo.x + 10, botonInfo.y + 10, 20, BLACK);
+            //DrawRectangleRec(botonInfo, GREEN);
+            //DrawText("Ayuda", botonInfo.x + 10, botonInfo.y + 10, 20, BLACK);
 
             // Manejo de clics en el botón Volver
             if (CheckCollisionPointRec(GetMousePosition(), botonRegresoGameplay) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -419,14 +457,14 @@ int main(void)
             }
 
             // Manejo de clics en el botón Ayuda
-            if (CheckCollisionPointRec(GetMousePosition(), botonInfo) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            /*if (CheckCollisionPointRec(GetMousePosition(), botonInfo) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 // Mostrar información de ayuda
                 // Ejemplo de cómo manejar la ayuda
-            }
+            }*/
             break;
         }
         case CHATBOT:
-            DrawText("Hola, soy Chatbot. Escribe tu pregunta:", 10, 10, 20, DARKGRAY);
+            DrawText("Hola, soy WashoBot. Escribe tu pregunta:", 10, 10, 20, DARKGRAY);
             
             // Dibujar el botón de regreso
             {

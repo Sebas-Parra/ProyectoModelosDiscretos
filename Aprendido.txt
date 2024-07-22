@@ -1,81 +1,81 @@
-PREGUNTA: ¿Que es la inferencia logica?
-A) Es un proceso de deduccion que utiliza reglas arbitrarias.  
-B) Es un proceso de deduccion que utiliza reglas de logica formal para derivar conclusiones a partir de premisas.  
-C) Es un proceso de induccion que utiliza ejemplos especificos para formular teorías generales.  
-D) Es un proceso de comparación que utiliza analogías para encontrar similitudes.  
+PREGUNTA: Que es la inferencia logica?
+A) Es un proceso de deduccion que utiliza reglas arbitrarias.
+B) Es un proceso de deduccion que utiliza reglas de logica formal para derivar conclusiones a partir de premisas.
+C) Es un proceso de induccion que utiliza ejemplos especificos para formular teorias generales.
+D) Es un proceso de comparacion que utiliza analogias para encontrar similitudes.
 RESPUESTA: B
 
-PREGUNTA: ¿Que representa el modus ponens en logica?
-A) Si P entonces Q, Q es falso, por lo tanto P es falso.  
-B) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.  
-C) Si P entonces Q, P es falso, por lo tanto Q es falso.  
-D) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.  
+PREGUNTA: Que representa el modus ponens en logica?
+A) Si P entonces Q, Q es falso, por lo tanto P es falso.
+B) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.
+C) Si P entonces Q, P es falso, por lo tanto Q es falso.
+D) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.
 RESPUESTA: B
 
-PREGUNTA: ¿Que representa el modus tollens en logica?
-A) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.  
-B) Si P entonces Q, Q es falso, por lo tanto P es falso.  
-C) Si P entonces Q, P es falso, por lo tanto Q es falso.  
-D) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.  
+PREGUNTA: Que representa el modus tollens en logica?
+A) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.
+B) Si P entonces Q, Q es falso, por lo tanto P es falso.
+C) Si P entonces Q, P es falso, por lo tanto Q es falso.
+D) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.
 RESPUESTA: B
 
-PREGUNTA: ¿Que es una premisa en logica?
-A) Es una conclusión derivada de un argumento.  
-B) Es una suposición arbitraria sin base en hechos.  
-C) Es una proposición que sirve como base para un argumento.  
-D) Es una afirmación que no puede ser verdadera ni falsa.  
+PREGUNTA: Que es una premisa en logica?
+A) Es una conclusion derivada de un argumento.
+B) Es una suposicion arbitraria sin base en hechos.
+C) Es una proposicion que sirve como base para un argumento.
+D) Es una afirmacion que no puede ser verdadera ni falsa.
 RESPUESTA: C
 
-PREGUNTA: ¿Que es una conclusión en logica?
-A) Es una proposición que no se puede verificar ni refutar.
-B) Es una proposición que se asume sin evidencia.
-C) Es una proposición que se deriva lógicamente de las premisas.
-D) Es una proposición que siempre es verdadera sin importar las premisas.
-RESPUESTA: C
+PREGUNTA: Que es una conclusion en logica?
+A) Es una proposicion que no se puede verificar ni refutar.
+B) Es una proposicion que se asume sin evidencia.
+C) Es una proposicion que se deriva logicamente de las premisas.
+D) Es una proposicion que siempre es verdadera sin importar las premisas.
+RESPUESTA: C
 
-PREGUNTA: ¿Qué es una proposición en lógica?
-A) Una expresión que siempre es verdadera.
-B) Una declaración que puede ser verdadera o falsa.
+PREGUNTA: Que es una proposicion en logica?
+A) Una expresion que siempre es verdadera.
+B) Una declaracion que puede ser verdadera o falsa.
 C) Una pregunta que necesita una respuesta.
-D) Una declaración que siempre es falsa.
+D) Una declaracion que siempre es falsa.
 RESPUESTA: B
 
-PREGUNTA: ¿Qué es la ley de la doble negación en lógica proposicional?
+PREGUNTA: Que es la ley de la doble negacion en logica proposicional?
 A) ¬(P y Q) equivalente ¬P o ¬Q
 B) P o ¬P equivalente P
 C) ¬(¬P) equivalente P
 D) P y ¬P equivalente P
 RESPUESTA: C
 
-PREGUNTA: ¿Qué representa la cuantificación universal en lógica?
-A) Existe al menos un elemento en el dominio que hace verdadera una proposición.
-B) Todos los elementos en el dominio hacen verdadera una proposición.
-C) Ningún elemento en el dominio hace verdadera una proposición.
-D) La proposición es verdadera solo para elementos específicos en el dominio.
+PREGUNTA: Que representa la cuantificacion universal en logica?
+A) Existe al menos un elemento en el dominio que hace verdadera una proposicion.
+B) Todos los elementos en el dominio hacen verdadera una proposicion.
+C) Ningun elemento en el dominio hace verdadera una proposicion.
+D) La proposicion es verdadera solo para elementos especificos en el dominio.
 RESPUESTA: B
 
-PREGUNTA: ¿Qué representa la cuantificación existencial en lógica?
-A) Existe al menos un elemento en el dominio que hace verdadera una proposición.
-B) Todos los elementos en el dominio hacen verdadera una proposición.
-C) Ningún elemento en el dominio hace verdadera una proposición.
-D) La proposición es verdadera solo para elementos específicos en el dominio.
+PREGUNTA: Que representa la cuantificacion existencial en logica?
+A) Existe al menos un elemento en el dominio que hace verdadera una proposicion.
+B) Todos los elementos en el dominio hacen verdadera una proposicion.
+C) Ningun elemento en el dominio hace verdadera una proposicion.
+D) La proposicion es verdadera solo para elementos especificos en el dominio.
 RESPUESTA: A
 
-PREGUNTA: ¿Qué es la complejidad temporal de un algoritmo?
+PREGUNTA: Que es la complejidad temporal de un algoritmo?
 A) La cantidad de memoria requerida por el algoritmo.
 B) La cantidad de pasos que toma el algoritmo para completarse.
 C) La eficiencia con la que el algoritmo maneja entradas paralelas.
-D) La precisión con la que el algoritmo produce resultados.
+D) La precision con la que el algoritmo produce resultados.
 RESPUESTA: B
 
-PREGUNTA: ¿Qué es la notación Big-O?
+PREGUNTA: Que es la notacion Big-O?
 A) Una forma de describir el caso mejor de un algoritmo.
 B) Una forma de describir el caso peor de un algoritmo.
 C) Una forma de describir el tiempo promedio de un algoritmo.
 D) Una forma de describir la memoria promedio usada por un algoritmo.
 RESPUESTA: B
 
-PREGUNTA: ¿Qué representa el teorema de la deducción en lógica proposicional?
+PREGUNTA: Que representa el teorema de la deduccion en logica proposicional?
 A) Si P entonces Q es verdadero si Q entonces P es verdadero.
 B) Si P y Q entonces R es verdadero, entonces P es verdadero.
 C) Si P entonces Q es verdadero, entonces Q entonces P es verdadero.

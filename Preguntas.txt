@@ -1,0 +1,6 @@
+PREGUNTA: Que representa la cuantificacion universal en logica?
+A) Existe al menos un elemento en el dominio que hace verdadera una proposicion.
+B) Todos los elementos en el dominio hacen verdadera una proposicion.
+C) Ningun elemento en el dominio hace verdadera una proposicion.
+D) La proposicion es verdadera solo para elementos especificos en el dominio.
+RESPUESTA: B
