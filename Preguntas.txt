@@ -1,18 +1,30 @@
-PREGUNTA: Que es una proposicion en logica?
-A) Una expresion que siempre es verdadera.
-B) Una declaracion que puede ser verdadera o falsa.
-C) Una pregunta que necesita una respuesta.
-D) Una declaracion que siempre es falsa.
+PREGUNTA: Que representa el modus tollens en logica?
+A) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.
+B) Si P entonces Q, Q es falso, por lo tanto P es falso.
+C) Si P entonces Q, P es falso, por lo tanto Q es falso.
+D) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.
 RESPUESTA: B
-PREGUNTA: Que es la complejidad temporal de un algoritmo?
-A) La cantidad de memoria requerida por el algoritmo.
-B) La cantidad de pasos que toma el algoritmo para completarse.
-C) La eficiencia con la que el algoritmo maneja entradas paralelas.
-D) La precision con la que el algoritmo produce resultados.
+PREGUNTA: Que es una conclusion en logica?
+A) Es una proposicion que no se puede verificar ni refutar.
+B) Es una proposicion que se asume sin evidencia.
+C) Es una proposicion que se deriva logicamente de las premisas.
+D) Es una proposicion que siempre es verdadera sin importar las premisas.
+RESPUESTA: C
+PREGUNTA: Que representa el modus ponens en logica?
+A) Si P entonces Q, Q es falso, por lo tanto P es falso.
+B) Si P entonces Q, P es verdadero, por lo tanto Q es verdadero.
+C) Si P entonces Q, P es falso, por lo tanto Q es falso.
+D) Si P entonces Q, Q es verdadero, por lo tanto P es verdadero.
 RESPUESTA: B
-PREGUNTA: Que representa la cuantificacion existencial en logica?
-A) Existe al menos un elemento en el dominio que hace verdadera una proposicion.
-B) Todos los elementos en el dominio hacen verdadera una proposicion.
-C) Ningun elemento en el dominio hace verdadera una proposicion.
-D) La proposicion es verdadera solo para elementos especificos en el dominio.
-RESPUESTA: B
+PREGUNTA: Que es una premisa en logica?
+A) Es una conclusion derivada de un argumento.
+B) Es una suposicion arbitraria sin base en hechos.
+C) Es una proposicion que sirve como base para un argumento.
+D) Es una afirmacion que no puede ser verdadera ni falsa.
+RESPUESTA: C
+PREGUNTA: Que es la ley de la doble negacion en logica proposicional?
+A) ¬(P y Q) equivalente ¬P o ¬Q
+B) P o ¬P equivalente P
+C) ¬(¬P) equivalente P
+D) P y ¬P equivalente P
+RESPUESTA: C

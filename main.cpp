@@ -240,48 +240,66 @@ int main(void)
             break;
         }
         case PREGUNTAS: {
-            if (!preguntaSeleccionadaFlag) {
-                // Seleccionar una pregunta aleatoria
-                std::srand(std::time(nullptr));
-                preguntaIndex = std::rand() % listaPreguntas.size();
-                lineaRand = listaPreguntas[preguntaIndex];
-                preguntaSeleccionadaFlag = true;
+            std::string lin;
+            std::ifstream archivo("Preguntas.txt", std::ios::in);
+            
+                if (!preguntaSeleccionadaFlag) {
+                    std::srand(std::time(nullptr));
+                    bool preguntaEncontrada;
+                    do {
+                        preguntaEncontrada = false;
+                        // Selecciona una pregunta aleatoria
+                        preguntaIndex = std::rand() % listaPreguntas.size();
+                        lineaRand = listaPreguntas[preguntaIndex];
 
-                // Configurar opciones
-                const std::vector<std::string>& opciones = listaOpciones[preguntaIndex];
-                // Asignar opciones a los botones
-                botonResp1.y = 100;
-                botonResp2.y = 160;
-                botonResp3.y = 220;
-                botonResp4.y = 280;
-            }
+                        archivo.clear();
+                        archivo.seekg(0, std::ios::beg);
 
-            // Manejo de clics en las opciones
-            if (!respuestaSeleccionadaFLag) {
-                Vector2 mousePos = GetMousePosition();
+                        while (getline(archivo,lin)) {
+                            if (lin == "PREGUNTA: " + lineaRand) {
+                                preguntaEncontrada = true;
+                                break;
+                            }
+                        }
 
-                if (CheckCollisionPointRec(mousePos, botonResp1) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 1;
-                    letra = 'A';
-                    respuestaSeleccionadaFLag = true;
-                }
-                if (CheckCollisionPointRec(mousePos, botonResp2) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 2;
-                    letra = 'B';
-                    respuestaSeleccionadaFLag = true;
-                }
-                if (CheckCollisionPointRec(mousePos, botonResp3) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 3;
-                    letra = 'C';
-                    respuestaSeleccionadaFLag = true;
-                }
-                if (CheckCollisionPointRec(mousePos, botonResp4) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 4;
-                    letra = 'D';
-                    respuestaSeleccionadaFLag = true;
-                }
-            }
+                    } while (preguntaEncontrada);
+                    preguntaSeleccionadaFlag = true;
 
+                    // Configurar opciones
+                    const std::vector<std::string>& opciones = listaOpciones[preguntaIndex];
+                    // Asignar opciones a los botones
+                    botonResp1.y = 100;
+                    botonResp2.y = 160;
+                    botonResp3.y = 220;
+                    botonResp4.y = 280;
+                }
+            
+                // Manejo de clics en las opciones
+                if (!respuestaSeleccionadaFLag) {
+                    Vector2 mousePos = GetMousePosition();
+
+                    if (CheckCollisionPointRec(mousePos, botonResp1) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                        respSelec = 1;
+                        letra = 'A';
+                        respuestaSeleccionadaFLag = true;
+                    }
+                    if (CheckCollisionPointRec(mousePos, botonResp2) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                        respSelec = 2;
+                        letra = 'B';
+                        respuestaSeleccionadaFLag = true;
+                    }
+                    if (CheckCollisionPointRec(mousePos, botonResp3) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                        respSelec = 3;
+                        letra = 'C';
+                        respuestaSeleccionadaFLag = true;
+                    }
+                    if (CheckCollisionPointRec(mousePos, botonResp4) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                        respSelec = 4;
+                        letra = 'D';
+                        respuestaSeleccionadaFLag = true;
+                    }
+                }
+            
             break;
         }
         case CHATBOT: {
@@ -377,7 +395,8 @@ int main(void)
             }
 
 
-            if (CheckCollisionRecs(destRecP, destRecM1)) {
+            if (CheckCollisionRecs(destRecP, destRecM1) || CheckCollisionRecs(destRecP, destRecM2) || CheckCollisionRecs(destRecP, destRecM3)
+                || CheckCollisionRecs(destRecP, destRecM4)) {
                 botonPregunta.x = 800 - 790;
                 botonPregunta.y = 450 - 50;
                 DrawRectangleRec(botonPregunta, GRAY);
@@ -385,36 +404,7 @@ int main(void)
                 if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
                     IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     currentScreen = PREGUNTAS;
-                }
-            }
-            else if (CheckCollisionRecs(destRecP, destRecM2)) {
-                botonPregunta.x = 800 - 790;
-                botonPregunta.y = 450 - 50;
-                DrawRectangleRec(botonPregunta, GRAY);
-                DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
-                if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
-                    IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    currentScreen = PREGUNTAS;
-                }
-            }
-            else if (CheckCollisionRecs(destRecP, destRecM3)) {
-                botonPregunta.x = 800 - 790;
-                botonPregunta.y = 450 - 50;
-                DrawRectangleRec(botonPregunta, GRAY);
-                DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
-                if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
-                    IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    currentScreen = PREGUNTAS;
-                }
-            }
-            else if (CheckCollisionRecs(destRecP, destRecM4)) {
-                botonPregunta.x = 800 - 790;
-                botonPregunta.y = 450 - 50;
-                DrawRectangleRec(botonPregunta, GRAY);
-                DrawText("Responder", screenWidth - 790, screenHeight - 41, 20, BLACK);
-                if (IsMouseOverRectangle(botonPregunta.x, botonPregunta.y, botonPregunta.width, botonPregunta.height) &&
-                    IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    currentScreen = PREGUNTAS;
+                    preguntaSeleccionadaFlag = false;
                 }
             }
             break;
@@ -451,7 +441,33 @@ int main(void)
                     preguntaSeleccionadaFlag = false; // Permite seleccionar una nueva pregunta
                     respuestaSeleccionadaFLag = false; // Permite seleccionar una nueva respuesta
                     respSelec = -1; // Restablecer selección de respuesta
-                    
+                    if (respuestaCorrecta) {
+                        std::fstream archivo("Preguntas.txt", std::ios::in | std::ios::out | std::ios::app);
+                        std::string linea;
+                        bool lineaEncontrada = false;
+
+                        if (archivo.is_open()) {
+                            archivo.seekp(0, std::ios::beg);
+                            while (getline(archivo, linea)) {
+                                if (linea.find("PREGUNTA: " + lineaRand) != std::string::npos) {
+                                    lineaEncontrada = true;
+                                    break;
+                                }
+                            }
+                            if (!lineaEncontrada) {
+                                archivo.clear();
+                                archivo.seekp(0, std::ios::end);
+                                archivo << "PREGUNTA: " << lineaRand << "\n";
+                                archivo << opciones[0] << "\n";
+                                archivo << opciones[1] << "\n";
+                                archivo << opciones[2] << "\n";
+                                archivo << opciones[3] << "\n";
+                                archivo << "RESPUESTA: " << letra << "\n";
+                            }
+                            archivo.close();
+
+                        }
+                    }
                 }
                 else {
                     if (!mensajeAdvertenciaFlag) {
@@ -477,32 +493,6 @@ int main(void)
             if (mostrarResultado) {
                 float tiempoActual = GetTime();
                 if (respuestaCorrecta) {
-                    
-                    std::fstream archivo("Preguntas.txt", std::ios::in | std::ios::out | std::ios::app);
-                    std::string linea;
-                    bool lineaEncontrada = false;
-                    
-                    if (archivo.is_open()) {
-                        archivo.seekp(0, std::ios::beg);
-                        while (getline(archivo,linea)) {
-                            if (linea.find("PREGUNTA: " + lineaRand) != std::string::npos) {
-                                lineaEncontrada = true;
-                                break;
-                            }
-                        }
-                        if (!lineaEncontrada) {
-                            archivo.clear();
-                            archivo.seekp(0, std::ios::end);
-                            archivo << "PREGUNTA: " << lineaRand << "\n";
-                            archivo << opciones[0] << "\n";
-                            archivo << opciones[1] << "\n";
-                            archivo << opciones[2] << "\n";
-                            archivo << opciones[3] << "\n";
-                            archivo << "RESPUESTA: " << letra << "\n";
-                        }
-                            archivo.close();
-                        
-                    }
                     DrawText("Respuesta correcta", 100, 400, 20, GREEN);
                     currentScreen = GAMEPLAY;
                 }
