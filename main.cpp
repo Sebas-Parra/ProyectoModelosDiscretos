@@ -27,7 +27,7 @@ int main(void)
     const int screenHeight = 450; // Altura
 
     InitWindow(screenWidth, screenHeight, "Proyecto Grupal");
-    SetWindowState(FLAG_WINDOW_RESIZABLE); // Hacer la ventana redimensionable
+    
 
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ int main(void)
     Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
     float velocidadBol = 4.0f;
     float scalaP = 2.5f;
-    int frameWidthP = personaje.width / 8;// Asumiendo que hay 6 frames en la animación
+    int frameWidthP = personaje.width / 8;// Asumiendo que hay 8 frames en la animación
     int frameHeightP = personaje.height;
     Rectangle sourceRecP = { 0.0f,0.0f,(float)frameWidthP,(float)frameHeightP };
     Rectangle destRecP = { personajePos.x,personajePos.y,frameWidthP * scalaP,frameHeightP * scalaP };
@@ -95,8 +95,8 @@ int main(void)
     float rotationF = 0.0f;
     //mesa1
     Vector2 mesa1Pos = { (float)screenWidth - 717,(float)screenHeight - 395 };
-    int frameWidthM1 = mesa1.width;
-    int frameHeightM1 = mesa1.height;
+    int frameWidthM1 = 47;
+    int frameHeightM1 = 40;
     float scalaM1 = 3.0f;
     Rectangle sourceRecM1 = { 0.0f,0.0f,(float)frameWidthM1,(float)frameHeightM1 };
     Rectangle destRecM1 = { mesa1Pos.x,mesa1Pos.y,frameWidthM1 * scalaM1, frameHeightM1 * scalaM1 };
@@ -104,8 +104,8 @@ int main(void)
     float rotation = 0.0f;
     //mesa2
     Vector2 mesa2Pos = { (float)screenWidth - 717,(float)screenHeight - 150 };
-    int frameWidthM2 = mesa2.width;
-    int frameHeightM2 = mesa2.height;
+    int frameWidthM2 = 47;
+    int frameHeightM2 = 40;
     float scalaM2 = 3.0f;
     Rectangle sourceRecM2 = { 0.0f,0.0f,(float)frameWidthM2,(float)frameHeightM2 };
     Rectangle destRecM2 = { mesa2Pos.x,mesa2Pos.y,frameWidthM2 * scalaM2, frameHeightM2 * scalaM2 };
@@ -113,17 +113,17 @@ int main(void)
     float rotationM2 = 0.0f;
     //mesa3
     Vector2 mesa3Pos = { (float)screenWidth - 70,(float)screenHeight - 325 };
-    int frameWidthM3 = mesa3.width;
-    int frameHeightM3 = mesa3.height;
+    int frameWidthM3 = 47;
+    int frameHeightM3 = 40;
     float scalaM3 = 3.0f;
     Rectangle sourceRecM3 = { 0.0f,0.0f,(float)frameWidthM3,(float)frameHeightM3 };
     Rectangle destRecM3 = { mesa3Pos.x,mesa3Pos.y,frameWidthM3 * scalaM3, frameHeightM3 * scalaM3 };
     Vector2 originM3 = { (frameWidthM3 * scalaM3) / 2.0f,(frameHeightM3 * scalaM3) / 2.0f };
     float rotationM3 = 0.0f;
     //mesa4
-    Vector2 mesa4Pos = { (float)screenWidth - 70,(float)screenHeight - 150 };
-    int frameWidthM4 = mesa4.width;
-    int frameHeightM4 = mesa4.height;
+    Vector2 mesa4Pos = { (float)screenWidth - 70,(float)screenHeight - 100 };
+    int frameWidthM4 = 47;
+    int frameHeightM4 = 40;
     float scalaM4 = 3.0f;
     Rectangle sourceRecM4 = { 0.0f,0.0f,(float)frameWidthM4,(float)frameHeightM4 };
     Rectangle destRecM4 = { mesa4Pos.x,mesa4Pos.y,frameWidthM4 * scalaM4, frameHeightM4 * scalaM4 };
@@ -172,21 +172,118 @@ int main(void)
                 if (currentframes > 5) currentframes = 0;
                 sourceRecP.x = (float)currentframes * frameWidthP;
             }
-            if (IsKeyDown(KEY_RIGHT) && personajePos.x < 799) personajePos.x += velocidadBol;
-            if (IsKeyDown(KEY_LEFT) && personajePos.x > 1) personajePos.x -= velocidadBol;
-            if (IsKeyDown(KEY_UP) && personajePos.y > 1) personajePos.y -= velocidadBol;
-            if (IsKeyDown(KEY_DOWN) && personajePos.y < 449) personajePos.y += velocidadBol;
+
+            
+
+            if (IsKeyDown(KEY_RIGHT) && personajePos.x < 799 ) {
+                personajePos.x += velocidadBol;
+            };
+            if (IsKeyDown(KEY_LEFT) && personajePos.x > 4 ) {
+                personajePos.x -= velocidadBol;
+            };
+            if (IsKeyDown(KEY_UP) && personajePos.y > 1) {
+                personajePos.y -= velocidadBol;
+            };
+            if (IsKeyDown(KEY_DOWN) && personajePos.y < 449 ) {
+                personajePos.y += velocidadBol; 
+            };
+            /*Rectangle nextPos;
+
+            // Movimiento hacia la derecha
+            nextPos = destRecP;
+            nextPos.x += velocidadBol;
+            if (IsKeyDown(KEY_RIGHT) && personajePos.x < 799 &&
+                !(CheckCollisionRecs(nextPos, destRecM1) ||
+                    CheckCollisionRecs(nextPos, destRecM2) ||
+                    CheckCollisionRecs(nextPos, destRecM3) ||
+                    CheckCollisionRecs(nextPos, destRecM4))) {
+                personajePos.x += velocidadBol;
+            }
+
+            // Movimiento hacia la izquierda
+            nextPos = destRecP;
+            nextPos.x -= velocidadBol;
+            if (IsKeyDown(KEY_LEFT) && personajePos.x > 4 &&
+                !(CheckCollisionRecs(nextPos, destRecM1) ||
+                    CheckCollisionRecs(nextPos, destRecM2) ||
+                    CheckCollisionRecs(nextPos, destRecM3) ||
+                    CheckCollisionRecs(nextPos, destRecM4))) {
+                personajePos.x -= velocidadBol;
+            }
+
+            // Movimiento hacia arriba
+            nextPos = destRecP;
+            nextPos.y -= velocidadBol;
+            if (IsKeyDown(KEY_UP) && personajePos.y > 1 &&
+                !(CheckCollisionRecs(nextPos, destRecM1) ||
+                    CheckCollisionRecs(nextPos, destRecM2) ||
+                    CheckCollisionRecs(nextPos, destRecM3) ||
+                    CheckCollisionRecs(nextPos, destRecM4))) {
+                personajePos.y -= velocidadBol;
+            }
+
+            // Movimiento hacia abajo
+            nextPos = destRecP;
+            nextPos.y += velocidadBol;
+            if (IsKeyDown(KEY_DOWN) && personajePos.y < 449 &&
+                !(CheckCollisionRecs(nextPos, destRecM1) ||
+                    CheckCollisionRecs(nextPos, destRecM2) ||
+                    CheckCollisionRecs(nextPos, destRecM3) ||
+                    CheckCollisionRecs(nextPos, destRecM4))) {
+                personajePos.y += velocidadBol;
+
+            }*/
             //if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = ENDING;
 
             
 
             break;
         }
-        case PREGUNTAS:
-            
-            
-            
+        case PREGUNTAS: {
+            if (!preguntaSeleccionadaFlag) {
+                // Seleccionar una pregunta aleatoria
+                std::srand(std::time(nullptr));
+                preguntaIndex = std::rand() % listaPreguntas.size();
+                lineaRand = listaPreguntas[preguntaIndex];
+                preguntaSeleccionadaFlag = true;
+
+                // Configurar opciones
+                const std::vector<std::string>& opciones = listaOpciones[preguntaIndex];
+                // Asignar opciones a los botones
+                botonResp1.y = 100;
+                botonResp2.y = 160;
+                botonResp3.y = 220;
+                botonResp4.y = 280;
+            }
+
+            // Manejo de clics en las opciones
+            if (!respuestaSeleccionadaFLag) {
+                Vector2 mousePos = GetMousePosition();
+
+                if (CheckCollisionPointRec(mousePos, botonResp1) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    respSelec = 1;
+                    letra = 'A';
+                    respuestaSeleccionadaFLag = true;
+                }
+                if (CheckCollisionPointRec(mousePos, botonResp2) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    respSelec = 2;
+                    letra = 'B';
+                    respuestaSeleccionadaFLag = true;
+                }
+                if (CheckCollisionPointRec(mousePos, botonResp3) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    respSelec = 3;
+                    letra = 'C';
+                    respuestaSeleccionadaFLag = true;
+                }
+                if (CheckCollisionPointRec(mousePos, botonResp4) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    respSelec = 4;
+                    letra = 'D';
+                    respuestaSeleccionadaFLag = true;
+                }
+            }
+
             break;
+        }
         case CHATBOT: {
             static char text[256] = { 0 }; // Inicializa el texto vacío
             static int textLength = 0;
@@ -324,21 +421,7 @@ int main(void)
         case PREGUNTAS: {
             static bool mensajeAdvertenciaFlag = false;
             static float tiempoInicioAdvertencia = 0;
-            if (!preguntaSeleccionadaFlag) {
-                // Seleccionar una pregunta aleatoria
-                std::srand(std::time(nullptr));
-                preguntaIndex = std::rand() % listaPreguntas.size();
-                lineaRand = listaPreguntas[preguntaIndex];
-                preguntaSeleccionadaFlag = true;
-
-                // Configurar opciones
-                const std::vector<std::string>& opciones = listaOpciones[preguntaIndex];
-                // Asignar opciones a los botones
-                botonResp1.y = 100;
-                botonResp2.y = 160;
-                botonResp3.y = 220;
-                botonResp4.y = 280;
-            }
+            
 
             // Dibuja la pregunta y las opciones
             DrawText(lineaRand.c_str(), 50, 50, 20, BLACK);
@@ -356,31 +439,7 @@ int main(void)
             DrawText(opciones[2].c_str(), botonResp3.x + 10, botonResp3.y + 10, 20, BLACK);
             DrawText(opciones[3].c_str(), botonResp4.x + 10, botonResp4.y + 10, 20, BLACK);
 
-            // Manejo de clics en las opciones
-            if (!respuestaSeleccionadaFLag) {
-                Vector2 mousePos = GetMousePosition();
-
-                if (CheckCollisionPointRec(mousePos, botonResp1) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 1;
-                    letra = 'A';
-                    respuestaSeleccionadaFLag = true;
-                }
-                if (CheckCollisionPointRec(mousePos, botonResp2) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 2;
-                    letra = 'B';
-                    respuestaSeleccionadaFLag = true;
-                }
-                if (CheckCollisionPointRec(mousePos, botonResp3) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 3;
-                    letra = 'C';
-                    respuestaSeleccionadaFLag = true;
-                }
-                if (CheckCollisionPointRec(mousePos, botonResp4) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    respSelec = 4;
-                    letra = 'D';
-                    respuestaSeleccionadaFLag = true;
-                }
-            }
+            
 
             // Manejo de clics en el botón Enviar
             if (CheckCollisionPointRec(GetMousePosition(), botonEnviarResp) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -413,22 +472,36 @@ int main(void)
                     mensajeAdvertenciaFlag = false; // Desactivar la advertencia después de 3 segundos
                 }
             }
-
+            
             // Mostrar mensaje de respuesta durante 3 segundos
             if (mostrarResultado) {
                 float tiempoActual = GetTime();
                 if (respuestaCorrecta) {
+                    
                     std::fstream archivo("Preguntas.txt", std::ios::in | std::ios::out | std::ios::app);
+                    std::string linea;
+                    bool lineaEncontrada = false;
+                    
                     if (archivo.is_open()) {
-                        archivo.seekp(0, std::ios::end);
-                        archivo << "PREGUNTA: " << lineaRand << "\n";
-                        archivo << opciones[0] << "\n";
-                        archivo << opciones[1] << "\n";
-                        archivo << opciones[2] << "\n";
-                        archivo << opciones[3] << "\n";
-                        archivo << "RESPUESTA: " << letra << "\n";
-
-                        archivo.close();
+                        archivo.seekp(0, std::ios::beg);
+                        while (getline(archivo,linea)) {
+                            if (linea.find("PREGUNTA: " + lineaRand) != std::string::npos) {
+                                lineaEncontrada = true;
+                                break;
+                            }
+                        }
+                        if (!lineaEncontrada) {
+                            archivo.clear();
+                            archivo.seekp(0, std::ios::end);
+                            archivo << "PREGUNTA: " << lineaRand << "\n";
+                            archivo << opciones[0] << "\n";
+                            archivo << opciones[1] << "\n";
+                            archivo << opciones[2] << "\n";
+                            archivo << opciones[3] << "\n";
+                            archivo << "RESPUESTA: " << letra << "\n";
+                        }
+                            archivo.close();
+                        
                     }
                     DrawText("Respuesta correcta", 100, 400, 20, GREEN);
                     currentScreen = GAMEPLAY;
@@ -499,6 +572,8 @@ int main(void)
     UnloadTexture(mesa2);
     UnloadTexture(mesa3);
     UnloadTexture(mesa4);
+    UnloadTexture(fondo);
+    UnloadTexture(menuPrincipal);
     CloseWindow(); // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 

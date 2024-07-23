@@ -1,4 +1,16 @@
-PREGUNTA: Que representa la cuantificacion universal en logica?
+PREGUNTA: Que es una proposicion en logica?
+A) Una expresion que siempre es verdadera.
+B) Una declaracion que puede ser verdadera o falsa.
+C) Una pregunta que necesita una respuesta.
+D) Una declaracion que siempre es falsa.
+RESPUESTA: B
+PREGUNTA: Que es la complejidad temporal de un algoritmo?
+A) La cantidad de memoria requerida por el algoritmo.
+B) La cantidad de pasos que toma el algoritmo para completarse.
+C) La eficiencia con la que el algoritmo maneja entradas paralelas.
+D) La precision con la que el algoritmo produce resultados.
+RESPUESTA: B
+PREGUNTA: Que representa la cuantificacion existencial en logica?
 A) Existe al menos un elemento en el dominio que hace verdadera una proposicion.
 B) Todos los elementos en el dominio hacen verdadera una proposicion.
 C) Ningun elemento en el dominio hace verdadera una proposicion.

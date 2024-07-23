@@ -65,7 +65,8 @@ public:
     const vector<string>& obtenerRespuestas() const {
         return respuestas;
     }
-    string obtenerOpcionCorrecta(const string& preguntaUsuario) const {
+    string obtenerOpcionCorrecta(const string& preguntaUsuario) {
+        cargarPreguntasRespuestas("Preguntas.txt");
         for (int i = 0; i < preguntas.size(); i++) {
             if (preguntaUsuario == preguntas[i]) {
                 string respuestaCorrecta = respuestas[i];
