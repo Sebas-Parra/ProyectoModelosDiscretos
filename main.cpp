@@ -27,11 +27,13 @@ int main(void)
     const int screenHeight = 450; // Altura
 
     InitWindow(screenWidth, screenHeight, "Proyecto Grupal");
-    
+    InitAudioDevice();
+
+    Music musica = LoadMusicStream("musicaFondo.mp3");
 
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
-
+    PlayMusicStream(musica);
     // La primera ventana que se verá sera la del menú
     GameScreen currentScreen = LOGO;
 
@@ -364,7 +366,8 @@ int main(void)
             break;
         case GAMEPLAY:
             // Diseño del juego en si
-
+            
+            UpdateMusicStream(musica);
             DrawTexturePro(fondo, sourceRecF, destRecF, originF, rotationF, WHITE);
             destRecP.x = personajePos.x;
             destRecP.y = personajePos.y;
@@ -564,6 +567,8 @@ int main(void)
     UnloadTexture(mesa4);
     UnloadTexture(fondo);
     UnloadTexture(menuPrincipal);
+    UnloadMusicStream(musica);  
+    CloseAudioDevice();
     CloseWindow(); // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
