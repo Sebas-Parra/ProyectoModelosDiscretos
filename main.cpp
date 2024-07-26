@@ -4,13 +4,12 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <iostream>
 #include <ctime>
 #include <cstdlib>
 
 //------------------------------------------------------------------------------------
 // Program main entry point
-typedef enum GameScreen { LOGO = 0, GAMEPLAY,PREGUNTAS, CHATBOT } GameScreen;
+typedef enum GameScreen { LOGO = 0,NIVEL, GAMEPLAY,PREGUNTAS, CHATBOT } GameScreen;
 
 bool IsMouseOverRectangle(int x, int y, int ancho, int alto) {
     Vector2 raton = GetMousePosition();
@@ -36,7 +35,7 @@ int main(void)
     PlayMusicStream(musica);
     // La primera ventana que se verá sera la del menú
     GameScreen currentScreen = LOGO;
-
+    
     int framesCounter = 0; // por necesitmos medir el tiempo de espera
 
     Preguntas preguntas("Aprendido.txt");
@@ -54,13 +53,14 @@ int main(void)
     bool respuestaCorrecta = false;
     float tiempoInicio = 0.0f;
     std::string letra = "";
+    bool respondidoCorrecto = false;
 
     Preguntas chatBot("Preguntas.txt");
 
     // Aqui se crea el personaje
     Texture2D personaje = LoadTexture("Robot.png");
     Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
-    float velocidadBol = 4.0f;
+    float velocidadBol = 3.3f;
     float scalaP = 2.5f;
     int frameWidthP = personaje.width / 8;// Asumiendo que hay 8 frames en la animación
     int frameHeightP = personaje.height;
@@ -73,6 +73,7 @@ int main(void)
     // Aqui se crean los demas objetos
     Texture2D menuPrincipal = LoadTexture("menu.png");
     Texture2D fondo = LoadTexture("pantalla_principal.png");
+    Texture PantallaNivel = LoadTexture("pantallaNiveles.png");
     Texture2D mesa1 = LoadTexture("mesa1.png");
     Texture2D mesa2 = LoadTexture("mesa2.png");
     Texture2D mesa3 = LoadTexture("mesa3.png");
@@ -95,6 +96,15 @@ int main(void)
     Rectangle destRecF = { fondoPos.x,fondoPos.y,frameWidthF * scalaF + 11, frameHeightF * scalaF - 18 };
     Vector2 originF = { 0.0f,0.0f };
     float rotationF = 0.0f;
+    //Pantalla de niveles
+    Vector2 NivelPos = { (float)screenWidth - 799,(float)screenHeight - 449 };
+    int frameWidthN = PantallaNivel.width;
+    int frameHeightN = PantallaNivel.height;
+    float scalaN = 3.5f;
+    Rectangle sourceRecN = { 0.0f,0.0f,(float)frameWidthN,(float)frameHeightN };
+    Rectangle destRecN = { NivelPos.x,NivelPos.y,frameWidthN * scalaN + 11, frameHeightN * scalaN - 18 };
+    Vector2 originN = { 0.0f,0.0f };
+    float rotationN = 0.0f;
     //mesa1
     Vector2 mesa1Pos = { (float)screenWidth - 717,(float)screenHeight - 395 };
     int frameWidthM1 = 47;
@@ -144,6 +154,37 @@ int main(void)
     Rectangle botonResp4 = { screenWidth - 750,screenHeight - 230,20,20 };
     Rectangle botonEnviarResp = { screenWidth - 110, screenHeight - 60, 100,50 };
     Color botonColor = BLUE;
+
+    //Botones de nivel
+    Rectangle botonNivel1 = { screenWidth - 730, screenHeight - 370,150, 300 };
+    Rectangle botonNivel2 = { screenWidth - 470, screenHeight - 370,150,300 };
+    Rectangle botonNivel3 = { screenWidth - 250,screenHeight - 370,150,300 };
+    Rectangle botonRegre = { screenWidth - 795,screenHeight - 445,100,50 };
+
+    //Progreso Nivel1
+    float ProgresoBarraN1 = 0.0f;
+    const float anchoBarraMaxN1 = 150.0f;
+    const float altoBarraN1 = 20.0f;
+    const float posXBarraN1 = screenWidth - 730;
+    const float posYBarraN1 = 420;
+    const int PuntosTotales = 10;
+
+    //Progreso Nivel2
+    float ProgresoBarraN2 = 0.0f;
+    const float anchoBarraMaxN2 = 150.0f;
+    const float altoBarraN2 = 20.0f;
+    const float posXBarraN2 = screenWidth - 476;
+    const float posYBarraN2 = 420;
+    const int PuntosTotalesN2 = 10;
+
+    //Progreso Nivel2
+    float ProgresoBarraN3 = 0.0f;
+    const float anchoBarraMaxN3 = 150.0f;
+    const float altoBarraN3 = 20.0f;
+    const float posXBarraN3 = screenWidth - 220;
+    const float posYBarraN3 = 420;
+    const int PuntosTotalesN3 = 10;
+
     //---------------------------------------------------------------------------------
 
     // Main game loop
@@ -161,8 +202,25 @@ int main(void)
             // framesCounter++;
             // if (framesCounter > 300) currentScreen = TITLE;
             DrawTexturePro(menuPrincipal, sourceRecMe, destRecMe, originMe, rotationMe, WHITE);
-            if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = GAMEPLAY;
+            if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = NIVEL;
             if (IsKeyPressed(KEY_C)) currentScreen = CHATBOT;
+            break;
+        case NIVEL:
+
+            
+            UpdateMusicStream(musica);
+            if (IsMouseOverRectangle(botonNivel1.x, botonNivel1.y, botonNivel1.width, botonNivel1.height)
+                && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = GAMEPLAY;
+
+            if (IsMouseOverRectangle(botonNivel2.x, botonNivel2.y, botonNivel2.width, botonNivel2.height)
+                && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = GAMEPLAY;
+
+            if (IsMouseOverRectangle(botonNivel3.x, botonNivel3.y, botonNivel3.width, botonNivel3.height)
+                && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = GAMEPLAY;
+
+            
+
+            
             break;
         case GAMEPLAY: {
             // Aqui va a ir toda la logica del juego en curso
@@ -174,9 +232,9 @@ int main(void)
                 if (currentframes > 5) currentframes = 0;
                 sourceRecP.x = (float)currentframes * frameWidthP;
             }
-
+            UpdateMusicStream(musica);
             
-
+            
             if (IsKeyDown(KEY_RIGHT) && personajePos.x < 799 ) {
                 personajePos.x += velocidadBol;
             };
@@ -236,12 +294,13 @@ int main(void)
 
             }*/
             //if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = ENDING;
-
+            
             
 
             break;
         }
         case PREGUNTAS: {
+            UpdateMusicStream(musica);
             std::string lin;
             std::ifstream archivo("Preguntas.txt", std::ios::in);
             
@@ -364,10 +423,43 @@ int main(void)
                 DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 30, PINK);
             }
             break;
+        case NIVEL:
+            
+            DrawRectangleRec(botonNivel1, BLACK);
+            
+            DrawRectangleRec(botonNivel2, GRAY);
+            
+            DrawRectangleRec(botonNivel3, DARKBLUE);
+
+            DrawTexturePro(PantallaNivel, sourceRecN, destRecN, originN, rotationN, WHITE);
+            if (IsMouseOverRectangle(botonRegre.x, botonRegre.y, botonRegre.width, botonRegre.height)) {
+                DrawRectangleRec(botonRegre, DARKGRAY);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    currentScreen = LOGO;
+                }
+            }
+            else {
+                DrawRectangleRec(botonRegre, GRAY);
+            }
+            DrawText("Selecciona el nivel!", screenWidth - 500, screenHeight - 440, 20, BLACK);
+            //DrawText("NIVEL 1", screenWidth - 657, screenHeight / 2, 20, WHITE);
+            //DrawText("NIVEL 2", screenWidth - 436, screenHeight / 2, 20, WHITE);
+            //DrawText("NIVEL 3", screenWidth - 218, screenHeight / 2, 20, WHITE);
+            DrawText("Regresar", screenWidth - 792, screenHeight -433, 20, WHITE);
+            //Barra nivel1
+            DrawRectangle(posXBarraN1, posYBarraN1, anchoBarraMaxN1, altoBarraN1, LIGHTGRAY);
+            DrawRectangle(posXBarraN1, posYBarraN1, ProgresoBarraN1, altoBarraN1, GREEN);
+            //Barra nivel2
+            DrawRectangle(posXBarraN2, posYBarraN2, anchoBarraMaxN2, altoBarraN2, LIGHTGRAY);
+            DrawRectangle(posXBarraN2, posYBarraN2, ProgresoBarraN2, altoBarraN2, GREEN);
+            //Barra nivel3
+            DrawRectangle(posXBarraN3, posYBarraN3, anchoBarraMaxN3, altoBarraN3, LIGHTGRAY);
+            DrawRectangle(posXBarraN3, posYBarraN3, ProgresoBarraN3, altoBarraN3, GREEN);
+            break;
         case GAMEPLAY:
             // Diseño del juego en si
             
-            UpdateMusicStream(musica);
+            
             DrawTexturePro(fondo, sourceRecF, destRecF, originF, rotationF, WHITE);
             destRecP.x = personajePos.x;
             destRecP.y = personajePos.y;
@@ -383,7 +475,7 @@ int main(void)
                 if (IsMouseOverRectangle(screenW - 130, 10, 120, 40)) {
                     DrawRectangle(screenW - 130, 10, 120, 40, GRAY);
                     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                        currentScreen = LOGO;
+                        currentScreen = NIVEL;
                         preguntaUsuario = "";
                         respuesta = "";
                     }
@@ -397,6 +489,10 @@ int main(void)
                 DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 20, PINK);
             }
 
+            if (respondidoCorrecto) {
+                DrawText("Respuesta correcta, sigue asi :) !!!!", 100, 400, 20, RED);
+                respondidoCorrecto = false;
+            }
 
             if (CheckCollisionRecs(destRecP, destRecM1) || CheckCollisionRecs(destRecP, destRecM2) || CheckCollisionRecs(destRecP, destRecM3)
                 || CheckCollisionRecs(destRecP, destRecM4)) {
@@ -410,6 +506,12 @@ int main(void)
                     preguntaSeleccionadaFlag = false;
                 }
             }
+            /*if (!respuestaCorrecta) {
+                
+            }*/
+
+            
+
             break;
         case PREGUNTAS: {
             static bool mensajeAdvertenciaFlag = false;
@@ -445,6 +547,11 @@ int main(void)
                     respuestaSeleccionadaFLag = false; // Permite seleccionar una nueva respuesta
                     respSelec = -1; // Restablecer selección de respuesta
                     if (respuestaCorrecta) {
+                        ProgresoBarraN1 += anchoBarraMaxN1 / PuntosTotales; //Esto va a ir incrementando
+                        if (ProgresoBarraN1 > anchoBarraMaxN1) {
+                            ProgresoBarraN1 = anchoBarraMaxN1;
+                        }
+                        respondidoCorrecto = true;
                         std::fstream archivo("Preguntas.txt", std::ios::in | std::ios::out | std::ios::app);
                         std::string linea;
                         bool lineaEncontrada = false;
@@ -496,11 +603,11 @@ int main(void)
             if (mostrarResultado) {
                 float tiempoActual = GetTime();
                 if (respuestaCorrecta) {
-                    DrawText("Respuesta correcta", 100, 400, 20, GREEN);
-                    currentScreen = GAMEPLAY;
+                    currentScreen = GAMEPLAY; 
+                    
                 }
                 else {
-                    DrawText("Respuesta incorrecta", 100, 400, 20, RED);
+                    DrawText("Respuesta incorrecta, sigue intentando :) !!!!", 100, 400, 20, RED);
                 }
 
                 // Mostrar el resultado durante 3 segundos
@@ -527,6 +634,8 @@ int main(void)
                 // Mostrar información de ayuda
                 // Ejemplo de cómo manejar la ayuda
             }*/
+
+            
             break;
         }
         case CHATBOT:
