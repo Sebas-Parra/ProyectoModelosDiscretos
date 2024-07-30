@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include <cstring>
 #include "Preguntas.h"
+#include "Persona.h"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -9,14 +10,64 @@
 
 //------------------------------------------------------------------------------------
 // Program main entry point
-typedef enum GameScreen { LOGO = 0,NIVEL, GAMEPLAY,GAMEPLAY2,GAMEPLAY3,PREGUNTAS, CHATBOT } GameScreen;
+typedef enum GameScreen {INGRESO=0, LOGO,NIVEL, GAMEPLAY,GAMEPLAY2,GAMEPLAY3,PREGUNTAS, CHATBOT } GameScreen;
 
 bool IsMouseOverRectangle(int x, int y, int ancho, int alto) {
     Vector2 raton = GetMousePosition();
     return (raton.x > x && raton.x < x + ancho && raton.y > y && raton.y < y + alto);
 }
 
+bool validarCedula(const char* cedula) {
+    int coeficientes[] = { 2, 1, 2, 1, 2, 1, 2, 1, 2 };
+    int suma = 0;
 
+    for (int i = 0; i < 9; i++) {
+        int digito = cedula[i] - '0';
+        int producto = digito * coeficientes[i];
+        if (producto > 9) producto -= 9;
+        suma += producto;
+    }
+
+    int ultimoDigito = cedula[9] - '0';
+    int decenaSuperior = (suma + 9) / 10 * 10;
+    int digitoVerificador = decenaSuperior - suma;
+
+    return digitoVerificador == ultimoDigito;
+}
+
+std::vector<Persona> cargarUsuarios(const std::string& archivo) {
+    std::vector<Persona> usuarios;
+    std::ifstream file(archivo);
+    if (!file.is_open()) return usuarios;
+
+    std::string line;
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string cedulaLabel, cedula, idLabel, id;
+        if (iss >> cedulaLabel >> cedula >> idLabel >> id) {
+            // Eliminar la coma después de la cédula
+            if (cedula.back() == ',') {
+                cedula.pop_back();
+            }
+            // Eliminar la etiqueta "Cedula:" y "ID:"
+            cedula = cedula.substr(0);
+            id = id.substr(0);
+            usuarios.push_back(Persona(cedula, id));
+        }
+    }
+
+    file.close();
+    return usuarios;
+}
+
+bool verificarUsuario(const std::vector<Persona>& usuarios, const std::string& cedula, const std::string& id) {
+    for (const auto& usuario : usuarios) {
+        if (usuario.cedula == cedula && usuario.id == id) {
+            return true;
+        }
+    }
+    return false;
+}
 //------------------------------------------------------------------------------------
 int main(void)
 {
@@ -34,7 +85,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     PlayMusicStream(musica);
     // La primera ventana que se verá sera la del menú
-    GameScreen currentScreen = LOGO;
+    GameScreen currentScreen = INGRESO;
     
     int framesCounter = 0; // por necesitmos medir el tiempo de espera
 
@@ -157,6 +208,18 @@ int main(void)
     Color botonColor = BLUE;
     Rectangle CuadroInfor = { screenWidth - 410, screenHeight - 200, 270,60 };
 
+    //Boton ingreso
+    Rectangle botonIngreso = { screenWidth - 110, screenHeight - 60, 100, 50 };
+    Rectangle campoCedula = { screenWidth-600, screenHeight-240, 200, 30 };
+    Rectangle campoId = { screenWidth - 600, screenHeight-170, 200, 30 };
+    char cedula[11] = "";
+    char id[11] = "";
+    int cedulaIndex = 0;
+    int idIndex = 0;
+    bool campoCedulaActivo = false;
+    bool campoIdActivo = false;
+    std::vector<Persona> usuarios = cargarUsuarios("Usuarios.txt");
+
     //Botones de nivel
     Rectangle botonNivel1 = { screenWidth - 730, screenHeight - 370,150, 300 };
     Rectangle botonNivel2 = { screenWidth - 470, screenHeight - 370,150,300 };
@@ -196,6 +259,72 @@ int main(void)
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         switch (currentScreen) {
+        case INGRESO:
+            // Detección de clics en los campos de texto
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                Vector2 mousePoint = GetMousePosition();
+                if (CheckCollisionPointRec(mousePoint, campoCedula)) {
+                    campoCedulaActivo = true;
+                    campoIdActivo = false;
+                }
+                else if (CheckCollisionPointRec(mousePoint, campoId)) {
+                    campoCedulaActivo = false;
+                    campoIdActivo = true;
+                }
+                else {
+                    campoCedulaActivo = false;
+                    campoIdActivo = false;
+                }
+            }
+
+            // Capturar entradas de teclado para el campo activo
+            if (campoCedulaActivo) {
+                int key = GetCharPressed();
+                if (key >= '0' && key <= '9') {
+                    if (cedulaIndex < 10) {
+                        cedula[cedulaIndex++] = (char)key;
+                        cedula[cedulaIndex] = '\0';
+                    }
+                }
+                else if (IsKeyPressed(KEY_BACKSPACE) && cedulaIndex > 0) {
+                    cedula[--cedulaIndex] = '\0';
+                }
+            }
+            else if (campoIdActivo) {
+                int key = GetCharPressed();
+                if ((key >= '0' && key <= '9') || (key >= 'A' && key <= 'Z') || (key >= 'a' && key <= 'z')) {
+                    if (idIndex < 10) {
+                        id[idIndex++] = (char)key;
+                        id[idIndex] = '\0';
+                    }
+                }
+                else if (IsKeyPressed(KEY_BACKSPACE) && idIndex > 0) {
+                    id[--idIndex] = '\0';
+                }
+            }
+            // Validar cédula al presionar el botón de ingreso
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), botonIngreso)) {
+                if (validarCedula(cedula)) {
+                    if (verificarUsuario(usuarios, cedula, id)) {
+                        currentScreen = LOGO;
+                    }
+                    else {
+                        // Limpiar el cuadro de cédula si no se encuentra el usuario
+                        cedulaIndex = 0;
+                        cedula[0] = '\0';
+                        idIndex = 0;
+                        id[0] = '\0';
+                    }
+                }
+                else {
+                    // Limpiar el cuadro de cédula si no es válida
+                    cedulaIndex = 0;
+                    cedula[0] = '\0';
+                    
+                }
+            }
+            break;
+
         case LOGO:
             // Todo lo que tenga que venir en el logo de la app
             // Solo aqui van a ir los frames por segundo
@@ -410,6 +539,20 @@ int main(void)
         ClearBackground(RAYWHITE);
 
         switch (currentScreen) {
+        case INGRESO:
+
+            DrawText("Ingrese su numero de cedula:", 200, 180, 20, DARKGRAY);
+            DrawRectangleRec(campoCedula, campoCedulaActivo ? LIGHTGRAY : DARKGRAY);
+            DrawText(cedula, 205, 215, 20, campoCedulaActivo ? BLACK : GRAY);
+
+            DrawText("Ingrese su ID:", 200, 250, 20, DARKGRAY);
+            DrawRectangleRec(campoId, campoIdActivo ? LIGHTGRAY : DARKGRAY);
+            DrawText(id, 205, 285, 20, campoIdActivo ? BLACK : GRAY);
+
+            DrawRectangle(botonIngreso.x, botonIngreso.y, botonIngreso.width, botonIngreso.height, BLUE);
+            DrawText("Ingresar", botonIngreso.x + 10, botonIngreso.y + 10, 20, WHITE);
+
+            break;
         case LOGO:
             // Aqui es el diseño del logo
             DrawText("Bienvenidos a todos!!", screenWidth - 540, 170, 30, BLACK);
