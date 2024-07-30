@@ -4,3 +4,21 @@ B) Si P y Q entonces R es verdadero, entonces P es verdadero.
 C) Si P entonces Q es verdadero, entonces Q entonces P es verdadero.
 D) Si P entonces Q es verdadero, entonces P entonces Q es verdadero.
 RESPUESTA: D
+PREGUNTA: Que representa la cuantificacion existencial en logica?
+A) Existe al menos un elemento en el dominio que hace verdadera una proposicion.
+B) Todos los elementos en el dominio hacen verdadera una proposicion.
+C) Ningun elemento en el dominio hace verdadera una proposicion.
+D) La proposicion es verdadera solo para elementos especificos en el dominio.
+RESPUESTA: A
+PREGUNTA: Que es la inferencia logica?
+A) Es un proceso de deduccion que utiliza reglas arbitrarias.
+B) Es un proceso de deduccion que utiliza reglas de logica formal para derivar conclusiones a partir de premisas.
+C) Es un proceso de induccion que utiliza ejemplos especificos para formular teorias generales.
+D) Es un proceso de comparacion que utiliza analogias para encontrar similitudes.
+RESPUESTA: B
+PREGUNTA: Que es una premisa en logica?
+A) Es una conclusion derivada de un argumento.
+B) Es una suposicion arbitraria sin base en hechos.
+C) Es una proposicion que sirve como base para un argumento.
+D) Es una afirmacion que no puede ser verdadera ni falsa.
+RESPUESTA: C

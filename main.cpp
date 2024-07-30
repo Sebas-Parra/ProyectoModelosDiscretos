@@ -9,7 +9,7 @@
 
 //------------------------------------------------------------------------------------
 // Program main entry point
-typedef enum GameScreen { LOGO = 0,NIVEL, GAMEPLAY,PREGUNTAS, CHATBOT } GameScreen;
+typedef enum GameScreen { LOGO = 0,NIVEL, GAMEPLAY,GAMEPLAY2,GAMEPLAY3,PREGUNTAS, CHATBOT } GameScreen;
 
 bool IsMouseOverRectangle(int x, int y, int ancho, int alto) {
     Vector2 raton = GetMousePosition();
@@ -71,6 +71,7 @@ int main(void)
     int framesCouter = 0;
     int currentframes = 0;
     // Aqui se crean los demas objetos
+    
     Texture2D menuPrincipal = LoadTexture("menu.png");
     Texture2D fondo = LoadTexture("pantalla_principal.png");
     Texture PantallaNivel = LoadTexture("pantallaNiveles.png");
@@ -154,6 +155,7 @@ int main(void)
     Rectangle botonResp4 = { screenWidth - 750,screenHeight - 230,20,20 };
     Rectangle botonEnviarResp = { screenWidth - 110, screenHeight - 60, 100,50 };
     Color botonColor = BLUE;
+    Rectangle CuadroInfor = { screenWidth - 410, screenHeight - 200, 270,60 };
 
     //Botones de nivel
     Rectangle botonNivel1 = { screenWidth - 730, screenHeight - 370,150, 300 };
@@ -206,7 +208,6 @@ int main(void)
             if (IsKeyPressed(KEY_C)) currentScreen = CHATBOT;
             break;
         case NIVEL:
-
             
             UpdateMusicStream(musica);
             if (IsMouseOverRectangle(botonNivel1.x, botonNivel1.y, botonNivel1.width, botonNivel1.height)
@@ -217,8 +218,6 @@ int main(void)
 
             if (IsMouseOverRectangle(botonNivel3.x, botonNivel3.y, botonNivel3.width, botonNivel3.height)
                 && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = GAMEPLAY;
-
-            
 
             
             break;
@@ -506,9 +505,7 @@ int main(void)
                     preguntaSeleccionadaFlag = false;
                 }
             }
-            /*if (!respuestaCorrecta) {
-                
-            }*/
+            
 
             
 
@@ -640,7 +637,13 @@ int main(void)
         }
         case CHATBOT:
             DrawText("Hola, soy WashoBot. Escribe tu pregunta:", 10, 10, 20, DARKGRAY);
-            
+            DrawRectangleRec(CuadroInfor,BLUE);
+
+            //Rectangle CuadroInfor = { screenWidth - 390, screenHeight - 200, 200,45 };
+
+            DrawText("No olvides el signo de '?'",screenWidth-400,screenHeight-190,20,BLACK);
+            DrawText("al final de la pregunta!!", screenWidth - 400, screenHeight - 168, 20, BLACK);
+
             // Dibujar el botón de regreso
             {
                 int screenW = GetScreenWidth();
