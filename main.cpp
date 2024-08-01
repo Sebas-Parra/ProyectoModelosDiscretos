@@ -43,16 +43,12 @@ std::vector<Persona> cargarUsuarios(const std::string& archivo) {
     std::string line;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
-        std::string cedulaLabel, cedula, idLabel, id;
-        if (iss >> cedulaLabel >> cedula >> idLabel >> id) {
-            // Eliminar la coma despuÈs de la cÈdula
-            if (cedula.back() == ',') {
-                cedula.pop_back();
-            }
-            // Eliminar la etiqueta "Cedula:" y "ID:"
-            cedula = cedula.substr(0);
-            id = id.substr(0);
-            usuarios.push_back(Persona(cedula, id));
+        std::string cedulaLabel, cedula, idLabel, id, puntajeLabel;
+        int puntaje;
+        char comma;
+
+        if (iss >> cedulaLabel >> cedula >> comma >> idLabel >> id >> comma >> puntajeLabel >> puntaje) {
+            usuarios.push_back(Persona(cedula, id, puntaje));
         }
     }
 
@@ -60,9 +56,19 @@ std::vector<Persona> cargarUsuarios(const std::string& archivo) {
     return usuarios;
 }
 
-bool verificarUsuario(const std::vector<Persona>& usuarios, const std::string& cedula, const std::string& id) {
-    for (const auto& usuario : usuarios) {
-        if (usuario.cedula == cedula && usuario.id == id) {
+
+// Funci√≥n para obtener el puntaje seg√∫n la c√©dula y el ID
+int obtenerPuntajePorCedulaYID( std::vector<Persona>& usuarios, std::string& cedula, std::string& id) {
+    for ( auto& usuario : usuarios) {
+        if (usuario.getCedula() == cedula && usuario.getID() == id) {
+            return usuario.getPuntaje();
+        }
+    }
+}
+
+bool verificarUsuario( std::vector<Persona>& usuarios, std::string& cedula,  std::string& id) {
+    for ( auto& usuario : usuarios) {
+        if (usuario.getCedula() == cedula && usuario.getID() == id) {
             return true;
         }
     }
@@ -84,7 +90,7 @@ int main(void)
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
     PlayMusicStream(musica);
-    // La primera ventana que se ver· sera la del men˙
+    // La primera ventana que se ver√° sera la del ingreso
     GameScreen currentScreen = INGRESO;
     
     int framesCounter = 0; // por necesitmos medir el tiempo de espera
@@ -113,7 +119,7 @@ int main(void)
     Vector2 personajePos = { (float)screenWidth / 2,(float)screenHeight / 2 };
     float velocidadBol = 3.3f;
     float scalaP = 2.5f;
-    int frameWidthP = personaje.width / 8;// Asumiendo que hay 8 frames en la animaciÛn
+    int frameWidthP = personaje.width / 8;// Asumiendo que hay 8 frames en la animaci√≥n
     int frameHeightP = personaje.height;
     Rectangle sourceRecP = { 0.0f,0.0f,(float)frameWidthP,(float)frameHeightP };
     Rectangle destRecP = { personajePos.x,personajePos.y,frameWidthP * scalaP,frameHeightP * scalaP };
@@ -208,7 +214,7 @@ int main(void)
     Color botonColor = BLUE;
     Rectangle CuadroInfor = { screenWidth - 410, screenHeight - 200, 270,60 };
 
-    //Boton ingreso
+    //Pantalla ingreso
     Rectangle botonIngreso = { screenWidth - 110, screenHeight - 60, 100, 50 };
     Rectangle campoCedula = { screenWidth-600, screenHeight-240, 200, 30 };
     Rectangle campoId = { screenWidth - 600, screenHeight-170, 200, 30 };
@@ -219,6 +225,12 @@ int main(void)
     bool campoCedulaActivo = false;
     bool campoIdActivo = false;
     std::vector<Persona> usuarios = cargarUsuarios("Usuarios.txt");
+    std::string cedulaUsuario = "";
+    std::string idUsuario = "";
+
+    int puntaje = 0;
+    int punto = 1;
+    int cantPreguntas = 0;
 
     //Botones de nivel
     Rectangle botonNivel1 = { screenWidth - 730, screenHeight - 370,150, 300 };
@@ -260,7 +272,7 @@ int main(void)
         // TODO: Update your variables here
         switch (currentScreen) {
         case INGRESO:
-            // DetecciÛn de clics en los campos de texto
+            // Detecci√≥n de clics en los campos de texto
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 Vector2 mousePoint = GetMousePosition();
                 if (CheckCollisionPointRec(mousePoint, campoCedula)) {
@@ -302,14 +314,24 @@ int main(void)
                     id[--idIndex] = '\0';
                 }
             }
-            // Validar cÈdula al presionar el botÛn de ingreso
+            // Validar c√©dula al presionar el bot√≥n de ingreso
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), botonIngreso)) {
                 if (validarCedula(cedula)) {
-                    if (verificarUsuario(usuarios, cedula, id)) {
+                    std::string cedulaStr(cedula);
+                    std::string idStr(id);
+                    
+                    if (verificarUsuario(usuarios, cedulaStr, idStr)) {
+                        cedulaUsuario = cedulaStr;
+                        idUsuario = idStr;
+                        puntaje = obtenerPuntajePorCedulaYID(usuarios, cedulaStr, idStr);
+                        cedulaIndex = 0;
+                        cedula[0] = '\0';
+                        idIndex = 0;
+                        id[0] = '\0';
                         currentScreen = LOGO;
                     }
                     else {
-                        // Limpiar el cuadro de cÈdula si no se encuentra el usuario
+                        // Limpiar el cuadro de c√©dula si no se encuentra el usuario
                         cedulaIndex = 0;
                         cedula[0] = '\0';
                         idIndex = 0;
@@ -317,7 +339,7 @@ int main(void)
                     }
                 }
                 else {
-                    // Limpiar el cuadro de cÈdula si no es v·lida
+                    // Limpiar el cuadro de c√©dula si no es v√°lida
                     cedulaIndex = 0;
                     cedula[0] = '\0';
                     
@@ -329,11 +351,12 @@ int main(void)
             // Todo lo que tenga que venir en el logo de la app
             // Solo aqui van a ir los frames por segundo
             // En esta parte solo se debe esperar hasta que pase a la siguiente 
-            // pestaÒa
+            // pesta√±a
             // framesCounter++;
             // if (framesCounter > 300) currentScreen = TITLE;
             DrawTexturePro(menuPrincipal, sourceRecMe, destRecMe, originMe, rotationMe, WHITE);
-            if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) currentScreen = NIVEL;
+            
+            if (IsKeyPressed(KEY_ENTER)) currentScreen = NIVEL;
             if (IsKeyPressed(KEY_C)) currentScreen = CHATBOT;
             break;
         case NIVEL:
@@ -362,6 +385,7 @@ int main(void)
             }
             UpdateMusicStream(musica);
             
+
             
             if (IsKeyDown(KEY_RIGHT) && personajePos.x < 799 ) {
                 personajePos.x += velocidadBol;
@@ -492,7 +516,7 @@ int main(void)
             break;
         }
         case CHATBOT: {
-            static char text[256] = { 0 }; // Inicializa el texto vacÌo
+            static char text[256] = { 0 }; // Inicializa el texto vac√≠o
             static int textLength = 0;
 
             int key = GetCharPressed();
@@ -500,16 +524,16 @@ int main(void)
                 if ((key >= 32) && (key <= 126) || (key >= 192 && key <= 255)) {
                     if (textLength < sizeof(text) - 1) {
                         text[textLength++] = (char)key;
-                        text[textLength] = '\0'; // Aseguramos que el texto estÈ terminado en nulo
+                        text[textLength] = '\0'; // Aseguramos que el texto est√© terminado en nulo
                     }
                 }
-                key = GetCharPressed(); // Captura el siguiente car·cter
+                key = GetCharPressed(); // Captura el siguiente car√°cter
             }
 
             if (IsKeyPressed(KEY_BACKSPACE)) {
                 if (textLength > 0) {
                     textLength--;
-                    text[textLength] = '\0'; // Aseguramos que el texto estÈ terminado en nulo
+                    text[textLength] = '\0'; // Aseguramos que el texto est√© terminado en nulo
                 }
             }
 
@@ -533,7 +557,7 @@ int main(void)
 
         // Draw
         //----------------------------------------------------------------------------------
-        // Aqui es donde va a ir todo el diseÒo del juego
+        // Aqui es donde va a ir todo el dise√±o del juego
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -554,18 +578,32 @@ int main(void)
 
             break;
         case LOGO:
-            // Aqui es el diseÒo del logo
+            // Aqui es el dise√±o del logo
             DrawText("Bienvenidos a todos!!", screenWidth - 540, 170, 30, BLACK);
             DrawText("Presiona Enter para controlar bot", 210, 250, 22, BLACK);
             DrawText("Presiona C para abrir el Chatbot", 204, 360, 25, BLACK);
+            //DrawText(TextFormat("%i", puntaje), screenWidth / 2, 410, 30, BLACK);
             {
                 int textWidth = MeasureText("Presiona ESC para salir", 30);
+                DrawText("Presiona ESC para salir", screenWidth - textWidth - 10, screenHeight - 40, 30, PINK);
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
-                DrawText("Presiona ESC para salir", screenW - textWidth - 10, screenH - 40, 30, PINK);
+                if (IsMouseOverRectangle(screenW - 130, 10, 120, 40)) {
+                    DrawRectangle(screenW - 130, 10, 120, 40, GRAY);
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                        currentScreen = INGRESO;
+                        
+                    }
+                }
+                else {
+                    DrawRectangle(screenW - 130, 10, 120, 40, LIGHTGRAY);
+                }
+                DrawText("Volver", screenW - 105, 20, 20, BLACK);
+
             }
             break;
         case NIVEL:
+            
             
             DrawRectangleRec(botonNivel1, BLACK);
             
@@ -597,9 +635,11 @@ int main(void)
             //Barra nivel3
             DrawRectangle(posXBarraN3, posYBarraN3, anchoBarraMaxN3, altoBarraN3, LIGHTGRAY);
             DrawRectangle(posXBarraN3, posYBarraN3, ProgresoBarraN3, altoBarraN3, GREEN);
+
+            DrawText(TextFormat("%i", puntaje), 750, 15, 30, BLACK);
             break;
         case GAMEPLAY:
-            // DiseÒo del juego en si
+            // Dise√±o del juego en si
             
             
             DrawTexturePro(fondo, sourceRecF, destRecF, originF, rotationF, WHITE);
@@ -610,7 +650,7 @@ int main(void)
             DrawTexturePro(mesa2,sourceRecM2,destRecM2,originM2,rotationM2,WHITE);
             DrawTexturePro(mesa3, sourceRecM3, destRecM3, originM3, rotationM3, WHITE);
             DrawTexturePro(mesa4, sourceRecM4, destRecM4, originM4, rotationM4, WHITE);
-            // Dibujar el botÛn de regreso
+            // Dibujar el bot√≥n de regreso
             {
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
@@ -649,7 +689,7 @@ int main(void)
                 }
             }
             
-
+            DrawText(TextFormat("%i", puntaje), screenWidth / 2, 20, 30, BLACK);
             
 
             break;
@@ -676,7 +716,7 @@ int main(void)
 
             
 
-            // Manejo de clics en el botÛn Enviar
+            // Manejo de clics en el bot√≥n Enviar
             if (CheckCollisionPointRec(GetMousePosition(), botonEnviarResp) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if (respuestaSeleccionadaFLag) {
                     std::string aux=listaRespuestas[preguntaIndex];
@@ -685,9 +725,10 @@ int main(void)
                     tiempoInicio = GetTime(); // Guardar el tiempo en que se muestra el resultado
                     preguntaSeleccionadaFlag = false; // Permite seleccionar una nueva pregunta
                     respuestaSeleccionadaFLag = false; // Permite seleccionar una nueva respuesta
-                    respSelec = -1; // Restablecer selecciÛn de respuesta
+                    respSelec = -1; // Restablecer selecci√≥n de respuesta
                     if (respuestaCorrecta) {
                         ProgresoBarraN1 += anchoBarraMaxN1 / PuntosTotales; //Esto va a ir incrementando
+
                         if (ProgresoBarraN1 > anchoBarraMaxN1) {
                             ProgresoBarraN1 = anchoBarraMaxN1;
                         }
@@ -735,27 +776,39 @@ int main(void)
                     DrawText("Seleccione una opcion antes de enviar.", 100, 400, 20, RED);
                 }
                 else {
-                    mensajeAdvertenciaFlag = false; // Desactivar la advertencia despuÈs de 3 segundos
+                    mensajeAdvertenciaFlag = false; // Desactivar la advertencia despu√©s de 3 segundos
                 }
             }
             
             // Mostrar mensaje de respuesta durante 3 segundos
             if (mostrarResultado) {
                 float tiempoActual = GetTime();
+                cantPreguntas++;
                 if (respuestaCorrecta) {
-                    currentScreen = GAMEPLAY; 
+                    DrawText("Respuesta correcta, sigue adelante :3 <3", 100, 400, 20, RED);
+                    
                     
                 }
                 else {
                     DrawText("Respuesta incorrecta, sigue intentando :) !!!!", 100, 400, 20, RED);
+                    punto = 1;
                 }
 
                 // Mostrar el resultado durante 3 segundos
                 if (tiempoActual - tiempoInicio > 3) {
                     mostrarResultado = false;
+                    puntaje += punto;
+                    punto++;
                     //currentScreen = GAMEPLAY;
                 }
             }
+            //Regresar al GAMEPLAY despues de las 5 preguntas
+            if (cantPreguntas==5) {
+                
+                currentScreen = GAMEPLAY;
+               
+            }
+
 
             // Dibuja los botones adicionales
             DrawRectangleRec(botonRegresoGameplay, BLUE);
@@ -763,16 +816,18 @@ int main(void)
             //DrawRectangleRec(botonInfo, GREEN);
             //DrawText("Ayuda", botonInfo.x + 10, botonInfo.y + 10, 20, BLACK);
 
-            // Manejo de clics en el botÛn Volver
+            // Manejo de clics en el bot√≥n Volver
             if (CheckCollisionPointRec(GetMousePosition(), botonRegresoGameplay) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 // Cambia al estado GAMEPLAY o el estado que corresponda
+                
                 currentScreen = GAMEPLAY;
             }
+            DrawText(TextFormat("%i", puntaje), 750, 15, 30, BLACK);
 
-            // Manejo de clics en el botÛn Ayuda
+            // Manejo de clics en el bot√≥n Ayuda
             /*if (CheckCollisionPointRec(GetMousePosition(), botonInfo) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                // Mostrar informaciÛn de ayuda
-                // Ejemplo de cÛmo manejar la ayuda
+                // Mostrar informaci√≥n de ayuda
+                // Ejemplo de c√≥mo manejar la ayuda
             }*/
 
             
@@ -787,7 +842,7 @@ int main(void)
             DrawText("No olvides el signo de '?'",screenWidth-400,screenHeight-190,20,BLACK);
             DrawText("al final de la pregunta!!", screenWidth - 400, screenHeight - 168, 20, BLACK);
 
-            // Dibujar el botÛn de regreso
+            // Dibujar el bot√≥n de regreso
             {
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
