@@ -10,7 +10,7 @@
 
 //------------------------------------------------------------------------------------
 // Program main entry point
-typedef enum GameScreen {INGRESO=0, LOGO,NIVEL, GAMEPLAY,GAMEPLAY2,GAMEPLAY3,PREGUNTAS, CHATBOT } GameScreen;
+typedef enum GameScreen {INGRESO=0, LOGO, APRENDIENDO, NIVEL, GAMEPLAY,GAMEPLAY2,GAMEPLAY3,PREGUNTAS, CHATBOT } GameScreen;
 
 bool IsMouseOverRectangle(int x, int y, int ancho, int alto) {
     Vector2 raton = GetMousePosition();
@@ -232,6 +232,11 @@ int main(void)
     int punto = 1;
     int cantPreguntas = 0;
 
+    //Botones Eleccion de clase
+    Rectangle botonClase1 = { screenWidth - 730, screenHeight - 300,340,100 };
+    Rectangle botonClase2 = { screenWidth - 730, screenHeight - 170,340,100 };
+    Rectangle botonVuelta = { screenWidth - 795,screenHeight - 445,100,50 };
+
     //Botones de nivel
     Rectangle botonNivel1 = { screenWidth - 730, screenHeight - 370,150, 300 };
     Rectangle botonNivel2 = { screenWidth - 470, screenHeight - 370,150,300 };
@@ -261,6 +266,9 @@ int main(void)
     const float posXBarraN3 = screenWidth - 220;
     const float posYBarraN3 = 420;
     const int PuntosTotalesN3 = 10;
+
+    //Pantalla en blanco
+    Rectangle pantallaBlanco = { 0,0,800,450 };
 
     //---------------------------------------------------------------------------------
 
@@ -356,8 +364,17 @@ int main(void)
             // if (framesCounter > 300) currentScreen = TITLE;
             DrawTexturePro(menuPrincipal, sourceRecMe, destRecMe, originMe, rotationMe, WHITE);
             
-            if (IsKeyPressed(KEY_ENTER)) currentScreen = NIVEL;
+            if (IsKeyPressed(KEY_ENTER)) currentScreen = APRENDIENDO;
             if (IsKeyPressed(KEY_C)) currentScreen = CHATBOT;
+            break;
+        case APRENDIENDO:
+            UpdateMusicStream(musica);
+            if (IsMouseOverRectangle(botonClase1.x, botonClase1.y, botonClase1.width, botonClase1.height)
+                && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = NIVEL;
+
+            if (IsMouseOverRectangle(botonClase2.x, botonClase2.y, botonClase2.width, botonClase2.height)
+                && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) currentScreen = NIVEL;
+
             break;
         case NIVEL:
             
@@ -602,6 +619,27 @@ int main(void)
 
             }
             break;
+        case APRENDIENDO:
+            DrawRectangleRec(botonClase1, BLUE);
+            DrawRectangleRec(botonClase2, GRAY);
+
+
+            DrawText("Escoge cómo deseas jugar", screenWidth - 730, 85, 30, BLACK);
+            DrawText("Juego Secuencial", screenWidth - 708, screenHeight - 267, 30, BLACK);
+            DrawText("Juego por parcial", screenWidth - 708, screenHeight - 139, 30, BLACK);
+
+            if (IsMouseOverRectangle(botonVuelta.x, botonVuelta.y, botonVuelta.width, botonVuelta.height)) {
+                DrawRectangleRec(botonVuelta, DARKGRAY);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    currentScreen = LOGO;
+                }
+            }
+            else {
+                DrawRectangleRec(botonVuelta, GRAY);
+            }
+            DrawText("Regresar", screenWidth - 792, screenHeight - 433, 20, WHITE);
+
+            break;
         case NIVEL:
             
             
@@ -615,7 +653,7 @@ int main(void)
             if (IsMouseOverRectangle(botonRegre.x, botonRegre.y, botonRegre.width, botonRegre.height)) {
                 DrawRectangleRec(botonRegre, DARKGRAY);
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    currentScreen = LOGO;
+                    currentScreen = APRENDIENDO;
                 }
             }
             else {
@@ -785,7 +823,10 @@ int main(void)
                 float tiempoActual = GetTime();
                 cantPreguntas++;
                 if (respuestaCorrecta) {
-                    DrawText("Respuesta correcta, sigue adelante :3 <3", 100, 400, 20, RED);
+                    
+                        DrawRectangleRec(pantallaBlanco, WHITE);
+                        DrawText("Respuesta correcta, sigue adelante :3 <3", 100, 400, 20, RED);
+                    
                     
                     
                 }
